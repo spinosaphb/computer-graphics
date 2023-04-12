@@ -13,7 +13,8 @@ float theta = 0.0;
 #define WIDTH 7.0
 #define HEIGHT 9.0
 
-// 0: empty space, 1: wall, 2: dot, 3: power-up, 4: Ghost House Door, 5: Fruit
+// 0: empty space, 1: wall, 2: dot, 3: power-up, 4: Ghost House Door, 5: Fruit, 6: Pacman Spawn
+// 7: Red Phantom, 8: Blue Phantom, 9: Pink Phantom, 10: Orange Phantom
 int pacmanMap[31][28] = {
 //   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 0
@@ -30,7 +31,7 @@ int pacmanMap[31][28] = {
     {0, 0, 0, 0, 0, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 0, 0, 0, 0, 0}, // 11
     {0, 0, 0, 0, 0, 1, 2, 1, 1, 0, 1, 1, 1, 4, 4, 1, 1, 1, 0, 1, 1, 2, 1, 0, 0, 0, 0, 0}, // 12
     {1, 1, 1, 1, 1, 1, 2, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1}, // 13
-    {0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0}, // 14
+    {0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 8, 9, 7, 10, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0}, // 14
     {1, 1, 1, 1, 1, 1, 2, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1}, // 15
     {0, 0, 0, 0, 0, 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 2, 1, 0, 0, 0, 0, 0}, // 16
     {0, 0, 0, 0, 0, 1, 2, 1, 1, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 1, 1, 2, 1, 0, 0, 0, 0, 0}, // 17
@@ -39,7 +40,7 @@ int pacmanMap[31][28] = {
     {1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1}, // 20
     {1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1}, // 21
     {1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1}, // 22
-    {1, 3, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 1}, // 23
+    {1, 3, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 0, 6, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 1}, // 23
     {1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1}, // 24
     {1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1}, // 25
     {1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1}, // 26
@@ -222,11 +223,11 @@ void drawCube() {
 
 void drawPoint() {
     glPushMatrix();
-        glScalef(.5, 1, 0.5);
+        glScalef(.65, 1, .65);
         drawCube();
     glPopMatrix();
     glPushMatrix();
-        glScalef(1, 0.65, 1);
+        glScalef(1, .65, 1);
         drawCube();
     glPopMatrix();
 }
@@ -271,6 +272,135 @@ void drawFruit() {
    glPopMatrix();
 }
 
+void drawSemiSphere(int slices = 100, int stacks = 100){
+    glPushMatrix();
+//        glColor3f(1.0, 1.0, 1.0);
+        GLdouble plane[4] = {0.0, 0.0, -1.0, 0.0};
+        glClipPlane(GL_CLIP_PLANE0, plane);
+        glEnable(GL_CLIP_PLANE0);
+
+        glutSolidSphere(raio, slices, stacks);
+        glDisable(GL_CLIP_PLANE0);
+    glPopMatrix();
+}
+
+void drawCircle(float cx, float cy, float ray, int stacks) {
+    glBegin(GL_POLYGON);
+        for (int i = 0; i < stacks; i++) {
+            float theta = 2.0f * 3.1415926f * float(i) / float(stacks);
+            float x = ray * cosf(theta);  // x-coordinate of the vertex
+            float y = ray * sinf(theta);  // y-coordinate of the vertex
+            glNormal3f(0, 0, 1);
+            glVertex2f(x + cx, y + cy);  // specify the vertex
+        }
+    glEnd();
+}
+
+
+void drawPacmanBody(Color bc, Color mc = Color(0,0,0), float mouthAngle = 90) {
+
+    glPushMatrix();
+        GUI::setColor(bc.red, bc.green, bc.blue);
+        drawSemiSphere();
+
+        GUI::setColor(mc.red, mc.green, mc.blue);
+        drawCircle(0.0, 0.0, 0.5, 100);
+
+        glRotatef(mouthAngle, 1, 0, 0);
+
+        GUI::setColor(bc.red, bc.green, bc.blue);
+        drawSemiSphere();
+
+        GUI::setColor(mc.red, mc.green, mc.blue);
+        drawCircle(0.0, 0.0, 0.5, 20);
+    glPopMatrix();
+}
+
+
+void drawPacman() {
+    glRotatef(-45, 1, 0, 0);
+    glPushMatrix();
+        drawPacmanBody(Color(1,1,0));
+
+        GUI::setColor(0,0,0);
+        glScalef(0.1,0.1,0.1);
+
+        glPushMatrix(); // Draw left side eye
+            glRotatef(-60, 0 , 1, 0);
+            glTranslatef(0, 2, 4);
+            glRotatef(-25, 1, 0, 0);
+            drawPoint();
+        glPopMatrix();
+
+        glPushMatrix(); // Draw right side eye
+            glRotatef(60, 0 , 1, 0);
+            glTranslatef(0, 2, 4);
+            glRotatef(-25, 1, 0, 0);
+            drawPoint();
+        glPopMatrix();
+   glPopMatrix();
+}
+
+void drawPhatom(Color pc = Color(1,0,0)) {
+    GUI::setColor(pc.red, pc.green, pc.blue);
+    glTranslatef(0, .25, 0);
+    glPushMatrix();
+        glRotatef(90, 1, 0, 0);
+        drawSemiSphere();
+    glPopMatrix();
+
+    glPushMatrix(); // Draw body
+        glScalef(.5,.5,.5);
+        glTranslatef(0, 0.1, 0);
+        glRotatef(90, 1,0,0);
+        gluCylinder(gluNewQuadric(), 1.0, 1.0, 1.5, 20, 20);
+    glPopMatrix();
+
+    glPushMatrix(); // Draw bottom
+        glTranslatef(0,-0.7,0);
+        glRotatef(90, 1, 0, 0);
+        drawCircle(0,0, 0.5, 100);
+    glPopMatrix();
+
+    // Draw ires
+    GUI::setColor(0,0,0);
+    glPushMatrix(); // Left eye
+        glScalef(0.2,0.2,0.2);
+        glTranslatef(-1.5, 0, 2.3);
+        glRotatef(-10, 0, 1, 0);
+        glRotatef(180, 0, 1, 0);
+        drawSemiSphere(20, 20);
+    glPopMatrix();
+
+    glPushMatrix(); // Right eye
+        glScalef(0.2,0.2,0.2);
+        glTranslatef(1.5, 0, 2.3);
+        glRotatef(10, 0, 1, 0);
+        glRotatef(180, 0, 1, 0);
+        drawSemiSphere(20, 20);
+    glPopMatrix();
+
+    //Draw pupile
+    GUI::setColor(1,1,1);
+    glPushMatrix(); // Left eye
+        glScalef(0.35,0.35,0.35);
+        glRotatef(15, 0, 1, 0);
+        glTranslatef(-1, 0, .8);
+        glRotatef(-45, 0, 1, 0);
+        glRotatef(180, 0, 1, 0);
+        drawSemiSphere(40, 40);
+    glPopMatrix();
+
+    glPushMatrix(); // Right eye
+        glScalef(0.35,0.35,0.35);
+        glRotatef(-15, 0, 1, 0);
+        glTranslatef(1, 0, .8);
+        glRotatef(45, 0, 1, 0);
+        glRotatef(180, 0, 1, 0);
+        drawSemiSphere(40, 40);
+    glPopMatrix();
+}
+
 void drawPacManMap() {
 //  for (int i = 0; i < 31; i++) {
 //    for (int j = 0; j < 28; j++) {
@@ -283,7 +413,7 @@ void drawPacManMap() {
 //    }
 //  }
     // Define the size of each cube
-    const float cubeSize = 0.10f;
+    const float cubeSize = 0.1f;
     // Iterate over the pacmanMap matrix
     for (int i = 0; i < 31; i++) {
         for (int j = 0; j < 28; j++) {
@@ -298,26 +428,48 @@ void drawPacManMap() {
             if (value == 1) {
                 glPushMatrix();
                 GUI::setColor(0.1+(i/40),0.1+(i/40),0.65+(i/40), 1,true);
-                glTranslatef(x*2, 1.0, z*-2);
+                glTranslatef(x*2, 0, z*-2);
                 glScalef(cubeSize, cubeSize, cubeSize);
                 drawCube();
                 glPopMatrix();
             }
 
-            else if (value == 2) {
+            else if (value == 2 || value == 3) {
+                float scaleSize = (value == 2) ? cubeSize/2 : cubeSize/1.5;
                 glPushMatrix();
                 GUI::setColor(0.99, 1, 0, 1,true);
-                glTranslatef(x*2, 1.0, z*-2);
-                glScalef(cubeSize/2, cubeSize/2, cubeSize/2);
+                glTranslatef(x*2, 0, z*-2);
+                glScalef(scaleSize, scaleSize, scaleSize);
                 drawPoint();
                 glPopMatrix();
             }
             else if (value == 5) {
                 glPushMatrix();
-                    glTranslatef(x*2, 1.0, z*-2);
-                    glScalef(0.25, 0.25, 0.25);
+                    glTranslatef(x*2, 0.0, z*-2);
+                    glScalef(0.15, 0.15, 0.15);
                     drawFruit();
                 glPopMatrix();
+            }
+            else if (value == 6) {
+                glPushMatrix();
+                    glTranslatef(x*2, 0, z*-2);
+                    glScalef(0.2, 0.2, 0.2);
+                    glRotatef(-90, 0, 1, 0);
+                    drawPacman();
+                glPopMatrix();
+            }
+            else if (value >= 7 && value <= 10) {
+                // 7: Red Phantom, 8: Blue Phantom, 9: Pink Phantom, 10: Orange Phantom
+                 Color pc = (value == 7)
+                         ? Color(1, 0, 0) : (value == 8)
+                         ? Color(0, 0.76, 0.79) : (value == 9)
+                         ? Color(1, 0.75, 0.79) : Color(1, 0.65, 0);
+
+                 glPushMatrix();
+                     glTranslatef(x*2, 0, z*-2);
+                     glScalef(0.2, 0.2, 0.2);
+                     drawPhatom(pc);
+                 glPopMatrix();
             }
         }
     }
@@ -355,7 +507,11 @@ void draw() {
 //            drawCube();
 //        glPopMatrix();
 //    }
-    drawPacManMap();
+    glPushMatrix();
+        glTranslatef(0,1,0);
+        drawPacManMap();
+    glPopMatrix();
+
     GUI::displayEnd();
 }
 
