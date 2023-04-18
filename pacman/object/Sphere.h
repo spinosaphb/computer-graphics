@@ -1,13 +1,5 @@
 #include "Object.h"
 
-struct Color {
-    float red;
-    float green;
-    float blue;
-
-    Color(float red=1, float green=0.6, float blue=0): red(red), green(green), blue(blue) {}
-};
-
 class Sphere : public Object {
 public:
     Sphere();

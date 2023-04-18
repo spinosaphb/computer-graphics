@@ -5,6 +5,8 @@ using namespace std;
 #include <gui.h>
 #include <Sphere.h>
 #include <model3ds.h>
+#include <array>
+#include <tuple>
 
 float px = 0.0;
 float py = 0.0;
@@ -29,7 +31,7 @@ int pacmanMap[31][28] = {
     {1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1}, // 9
     {0, 0, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 0, 0}, // 10
     {0, 0, 0, 0, 0, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 0, 0, 0, 0, 0}, // 11
-    {0, 0, 0, 0, 0, 1, 2, 1, 1, 0, 1, 1, 1, 4, 4, 1, 1, 1, 0, 1, 1, 2, 1, 0, 0, 0, 0, 0}, // 12
+    {0, 0, 0, 0, 0, 1, 2, 1, 1, 0, 1, 1, 1, 4, 0, 1, 1, 1, 0, 1, 1, 2, 1, 0, 0, 0, 0, 0}, // 12
     {1, 1, 1, 1, 1, 1, 2, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1}, // 13
     {0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 8, 9, 7, 10, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0}, // 14
     {1, 1, 1, 1, 1, 1, 2, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1}, // 15
@@ -401,6 +403,92 @@ void drawPhatom(Color pc = Color(1,0,0)) {
     glPopMatrix();
 }
 
+void drawTraingle() {
+    glBegin(GL_POLYGON);
+        glNormal3f(0,1,1);
+        glVertex3f(1,0,0);
+        glVertex3f(0,2,0);
+        glVertex3f(-1,0,0);
+    glEnd();
+}
+
+void drawGate() {
+    GUI::setColor(.7, .7, .7);
+    glPushMatrix();
+        glScalef(.25,.25,.25);
+        glTranslatef(-7,6,0);
+        piramide();
+    glPopMatrix();
+    glPushMatrix();
+        glScalef(.25,.25,.25);
+        glTranslatef(7,6,0);
+        piramide();
+    glPopMatrix();
+
+    GUI::setColor(.6, 0, 0);
+    glPushMatrix();
+        glScalef(.25,.25,.25);
+        glTranslatef(-7,5,0);
+        drawPoint();
+    glPopMatrix();
+    glPushMatrix();
+        glScalef(.25,.25,.25);
+        glTranslatef(7,5,0);
+        drawPoint();
+    glPopMatrix();
+
+
+
+    glPushMatrix();
+        glScalef(1, 1, 0.25);
+        glTranslatef(-1,0,0);
+        drawCube();
+    glPopMatrix();
+    glPushMatrix();
+        glScalef(1, 1, 0.25);
+        glTranslatef(1,0,0);
+        drawCube();
+    glPopMatrix();
+
+
+
+    std::array<std::tuple<int, int>, 4> gateDecPositions = {
+        std::make_tuple(1, 2),
+        std::make_tuple(1, -2),
+        std::make_tuple(-1, 2),
+        std::make_tuple(-1, -2)
+    };
+
+    for(const tuple<int, int>& t : gateDecPositions){
+        int x = get<0>(t);
+        int z = get<1>(t);
+
+        GUI::setColor(0.0, 0.5, 0.0);
+        glPushMatrix();
+            glScalef(.8, .8, 0.1);
+            glTranslatef(x,0,z);
+            drawCube();
+        glPopMatrix();
+
+        GUI::setColor(1.0, 0.75, 0.0);
+        glPushMatrix();
+            glScalef(0.75,0.75,0.75);
+            glTranslatef(0,0,.82/z);
+            if(z<0) glRotatef(180, 1, 0, 0);
+            glRotatef(90*x, 0, 0, 1);
+            drawTraingle();
+        glPopMatrix();
+
+        GUI::setColor(0.0, 0.39, 0.75);
+        glPushMatrix();
+            glScalef(1.15,1.15,1.15);
+            glTranslatef(0,0,.54/z);
+            if(z<0) glRotatef(180, 1, 0, 0);
+            drawCircle(0, 0, raio, 100);
+        glPopMatrix();
+    }
+}
+
 void drawPacManMap() {
 //  for (int i = 0; i < 31; i++) {
 //    for (int j = 0; j < 28; j++) {
@@ -443,6 +531,14 @@ void drawPacManMap() {
                 drawPoint();
                 glPopMatrix();
             }
+            else if (value == 4) {
+                glPushMatrix();
+                    glTranslatef(x*2, 0.0, z*-2);
+                    glScalef(cubeSize, cubeSize, cubeSize);
+                    glTranslatef(1,0,0);
+                    drawGate();
+                glPopMatrix();
+            }
             else if (value == 5) {
                 glPushMatrix();
                     glTranslatef(x*2, 0.0, z*-2);
@@ -482,7 +578,7 @@ void draw() {
 
     GUI::setLight(0, 0,2,0, true, false);
 
-    GUI::setColor(.5,.5,.5);
+    GUI::setColor(.1,.1,.1);
     GUI::drawFloor(WIDTH, HEIGHT);
     GUI::drawOriginAL(1, 0.1);
 
@@ -511,6 +607,7 @@ void draw() {
         glTranslatef(0,1,0);
         drawPacManMap();
     glPopMatrix();
+
 
     GUI::displayEnd();
 }
@@ -553,7 +650,7 @@ int main()
     
     
 
-    GUI gui = GUI(800,600,draw,teclado);
+    GUI gui = GUI(800,600,draw,teclado, glutGUI::defaultMouseButton, "Pacman World");
 }
 
 //inicializando OpenGL

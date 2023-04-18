@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# if --make-makefile is passed as argument, then only makefile will be created
+function make_makefile() {
+    # Go to 'build' directory
+    cd build
+
+    # Create make file from .pro file
+    qmake-qt5 ../pacman.pro
+
+    # Go out of 'build' directory
+    cd ..
+}
+
+# if --build is passed as argument, then only build will be done
+function build() {
+    # Go to 'build' directory
+    cd build
+
+    # Build the project at 'build' directory
+    make >> /dev/null
+
+    # Go out of 'build' directory
+    cd ..
+}
+
+# if --run is passed as argument, then only run will be done
+function run() {
+    # Run the project
+    ./build/pacman
+}
+
+# if --clean is passed as argument, then only clean will be done
+function clean() {
+    # Remove 'build' files
+    rm build/*.o && rm build/.qmake.stash
+}
+
+# if --clean-all is passed as argument, then only clean-all will be done
+function clean_all() {
+    # Remove 'build' files
+    rm build/* && rm build/.qmake.stash
+}
+
+# if --build-run is passed as argument, then only build-run will be done
+function build_run() {
+    build
+    run
+    clean
+}
+
+# if --make-all is passed as argument, then only make-all will be done
+function make_all() {
+    make_makefile
+    build_run
+}
+
+# if --help is passed as argument, then only help will be shown
+function help() {
+    echo "Usage: ./run [OPTION]"
+    echo "Options:"
+    echo "  --make-makefile    Create makefile only"
+    echo "  --build            Build only"
+    echo "  --run              Run only"
+    echo "  --clean            Clean only"
+    echo "  --clean-all        Clean all files from build directory"
+    echo "  --build-run        Build and run"
+    echo "  --make-all         Make all"
+    echo "  --help             Show help"
+}
+
+# if no argument is passed, then help will be shown
+if [ $# -eq 0 ]; then
+    help
+    exit 1
+fi
+
+# if argument is passed, then it will be checked
+case $1 in
+    --make-makefile) make_makefile ;;
+    --build) build ;;
+    --run) run ;;
+    --clean) clean ;;
+    --clean-all) clean_all ;;
+    --build-run) build_run ;;
+    --make-all) make_all ;;
+    --help) help ;;
+    *) echo "Invalid argument passed" ;;
+esac
