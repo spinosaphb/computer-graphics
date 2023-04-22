@@ -1,23 +1,65 @@
+#ifndef OBJECT_H
+#define OBJECT_H
+
+#include <queue>
+#include <map>
+#include <string>
+
+using namespace std;
+
+enum Transformation{
+    TRANSLATE = 1,
+    ROTATE = 2,
+    SCALE = 3
+};
 
 struct Point {
     float x;
     float y;
     float z;
+    float a;
 
-    Point(float x=0, float y=0, float z=0): x(x), y(y), z(z) {}
+    Point(float x=0, float y=0, float z=0, float a=0): x(x), y(y), z(z), a(a) {}
 };
 
 struct Color {
-    float red;
-    float green;
-    float blue;
+    float r;
+    float g;
+    float b;
 
-    Color(float red=1, float green=0.6, float blue=0): red(red), green(green), blue(blue) {}
+    Color(float r=1, float g=0.6, float b=0): r(r), g(g), b(b) {}
+};
+
+struct Matrix {
+    Point t;
+    Point r;
+    Point s;
+
+    Matrix(
+        Point t=Point(1,1,1),
+        Point r=Point(1,1,1),
+        Point s=Point(1,1,1)
+    ): t(t), r(r), s(s) {}
 };
 
 class Object {
 public:
+    Matrix matrix;
+
     virtual void draw();
+    
+    void translate(float x, float y, float z);
+    void rotate(float angle, float x, float y, float z);
+    void scale(float x, float y, float z);
+
+    Object();
+
 protected:
-    Point point;
+    void addTransformation(Transformation, Point);
+    void applyTransformations();
+    void _draw();
+    queue<pair<Transformation, Point>> tqueue;
+    Color color;
 };
+
+#endif

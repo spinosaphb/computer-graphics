@@ -4,6 +4,8 @@ using namespace std;
 
 #include <gui.h>
 #include <Sphere.h>
+#include <Cube.h>
+#include <ScorePoint.h>
 #include <model3ds.h>
 #include <array>
 #include <tuple>
@@ -181,57 +183,21 @@ void transformacoesSemMatriz() {
 
 
 void drawCube() {
-    glBegin(GL_QUADS);
-        // Front face
-        glNormal3f(0, 0, 1);
-        glVertex3f(1, -1, 1);
-        glVertex3f(1, 1, 1);
-        glVertex3f(-1, 1, 1);
-        glVertex3f(-1, -1, 1);
-
-        // Back face
-        glNormal3f(0, 0, -1);
-        glVertex3f(-1, -1, -1);
-        glVertex3f(-1, 1, -1);
-        glVertex3f(1, 1, -1);
-        glVertex3f(1, -1, -1);
-        // Top face
-        glNormal3f(0, 1, 0);
-        glVertex3f(1, 1, 1);
-        glVertex3f(1, 1, -1);
-        glVertex3f(-1, 1, -1);
-        glVertex3f(-1, 1, 1);
-        // Bottom face
-        glNormal3f(0, -1, 0);
-        glVertex3f(1, -1, 1);
-        glVertex3f(-1, -1, 1);
-        glVertex3f(-1, -1, -1);
-        glVertex3f(1, -1, -1);
-        // Left face
-        glNormal3f(-1, 0, 0);
-        glVertex3f(-1, -1, 1);
-        glVertex3f(-1, 1, 1);
-        glVertex3f(-1, 1, -1);
-        glVertex3f(-1, -1, -1);
-        // Right face
-        glNormal3f(1, 0, 0);
-        glVertex3f(1, -1, 1);
-        glVertex3f(1, -1, -1);
-        glVertex3f(1, 1, -1);
-        glVertex3f(1, 1, 1);
-
-    glEnd();
+    Cube c = Cube();
+    c.draw();
 }
 
 void drawPoint() {
-    glPushMatrix();
-        glScalef(.65, 1, .65);
-        drawCube();
-    glPopMatrix();
-    glPushMatrix();
-        glScalef(1, .65, 1);
-        drawCube();
-    glPopMatrix();
+    ScorePoint sp = ScorePoint();
+    sp.draw();
+    // glPushMatrix();
+    //     glScalef(.65, 1, .65);
+    //     drawCube();
+    // glPopMatrix();
+    // glPushMatrix();
+    //     glScalef(1, .65, 1);
+    //     drawCube();
+    // glPopMatrix();
 }
 
 void drawFruit() {
@@ -302,18 +268,18 @@ void drawCircle(float cx, float cy, float ray, int stacks) {
 void drawPacmanBody(Color bc, Color mc = Color(0,0,0), float mouthAngle = 90) {
 
     glPushMatrix();
-        GUI::setColor(bc.red, bc.green, bc.blue);
+        GUI::setColor(bc.r, bc.g, bc.b);
         drawSemiSphere();
 
-        GUI::setColor(mc.red, mc.green, mc.blue);
+        GUI::setColor(mc.r, mc.g, mc.b);
         drawCircle(0.0, 0.0, 0.5, 100);
 
         glRotatef(mouthAngle, 1, 0, 0);
 
-        GUI::setColor(bc.red, bc.green, bc.blue);
+        GUI::setColor(bc.r, bc.g, bc.b);
         drawSemiSphere();
 
-        GUI::setColor(mc.red, mc.green, mc.blue);
+        GUI::setColor(mc.r, mc.g, mc.b);
         drawCircle(0.0, 0.0, 0.5, 20);
     glPopMatrix();
 }
@@ -344,7 +310,7 @@ void drawPacman() {
 }
 
 void drawPhatom(Color pc = Color(1,0,0)) {
-    GUI::setColor(pc.red, pc.green, pc.blue);
+    GUI::setColor(pc.r, pc.g, pc.b);
     glTranslatef(0, .25, 0);
     glPushMatrix();
         glRotatef(90, 1, 0, 0);

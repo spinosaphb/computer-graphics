@@ -62,7 +62,9 @@ SOURCES       = ../main.cpp \
 		../gui_glut/extra.cpp \
 		../gui_glut/gui.cpp \
 		../object/Sphere.cpp \
-		../object/Object.cpp 
+		../object/Object.cpp \
+		../object/Cube.cpp \
+		../object/ScorePoint.cpp 
 OBJECTS       = main.o \
 		Camera.o \
 		CameraDistante.o \
@@ -73,7 +75,9 @@ OBJECTS       = main.o \
 		extra.o \
 		gui.o \
 		Sphere.o \
-		Object.o
+		Object.o \
+		Cube.o \
+		ScorePoint.o
 DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -152,7 +156,9 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		gui_glut/extra.h \
 		gui_glut/gui.h \
 		object/Sphere.h \
-		object/Object.h ../main.cpp \
+		object/Object.h \
+		object/Cube.h \
+		object/ScorePoint.h ../main.cpp \
 		../bib/Camera.cpp \
 		../bib/CameraDistante.cpp \
 		../bib/CameraJogo.cpp \
@@ -162,7 +168,9 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		../gui_glut/extra.cpp \
 		../gui_glut/gui.cpp \
 		../object/Sphere.cpp \
-		../object/Object.cpp
+		../object/Object.cpp \
+		../object/Cube.cpp \
+		../object/ScorePoint.cpp
 QMAKE_TARGET  = pacman
 DESTDIR       = 
 TARGET        = pacman
@@ -367,7 +375,9 @@ main.o: ../main.cpp ../gui_glut/gui.h \
 		../bib/Desenha.h \
 		../bib/model3ds.h \
 		../object/Sphere.h \
-		../object/Object.h
+		../object/Object.h \
+		../object/Cube.h \
+		../object/ScorePoint.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 Camera.o: ../bib/Camera.cpp ../bib/Camera.h \
@@ -426,6 +436,15 @@ Sphere.o: ../object/Sphere.cpp ../object/Sphere.h \
 
 Object.o: ../object/Object.cpp ../object/Object.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Object.o ../object/Object.cpp
+
+Cube.o: ../object/Cube.cpp ../object/Cube.h \
+		../object/Object.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Cube.o ../object/Cube.cpp
+
+ScorePoint.o: ../object/ScorePoint.cpp ../object/ScorePoint.h \
+		../object/Object.h \
+		../object/Cube.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ScorePoint.o ../object/ScorePoint.cpp
 
 ####### Install
 

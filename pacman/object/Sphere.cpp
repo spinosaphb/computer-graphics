@@ -23,6 +23,10 @@ Sphere::Sphere(Color color, Point point, float radius) {
     this->radius = radius;
 }
 
-void Sphere::draw() {
+void Sphere::_draw() {
     GUI::drawSphere(this->point.x,this->point.y,this->point.z,this->radius);
+}
+
+void Sphere::draw() {
+    this->_draw();
 }

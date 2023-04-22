@@ -38,8 +38,8 @@ function clean() {
 
 # if --clean-all is passed as argument, then only clean-all will be done
 function clean_all() {
-    # Remove 'build' files
-    rm build/* && rm build/.qmake.stash
+    # Remove 'build' files except 'Makefile'
+    rm -rf build/*.o && rm -rf build/.qmake.stash
 }
 
 # if --build-run is passed as argument, then only build-run will be done

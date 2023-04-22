@@ -20,7 +20,9 @@ SOURCES += main.cpp \
     gui_glut/extra.cpp \
     gui_glut/gui.cpp \
     object/Sphere.cpp \
-    object/Object.cpp
+    object/Object.cpp \
+    object/Cube.cpp \
+    object/ScorePoint.cpp
 
 HEADERS += \
     bib/Camera.h \
@@ -32,4 +34,6 @@ HEADERS += \
     gui_glut/extra.h \
     gui_glut/gui.h \
     object/Sphere.h \
-    object/Object.h
+    object/Object.h \
+    object/Cube.h \
+    object/ScorePoint.h
