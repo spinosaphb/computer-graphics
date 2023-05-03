@@ -5,12 +5,11 @@
 
 class Cube : public Object {
 public:
-    Cube(Color color = Color(), Point point = Point());
+    Cube(Color color = Color(0.1,0.1,0.6), Point point = Point());
 
     ~Cube();
 
     void _draw();
-    void draw();
 };
 
 #endif

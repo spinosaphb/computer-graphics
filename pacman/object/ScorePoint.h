@@ -9,7 +9,6 @@ public:
     ScorePoint(Color color = Color(), Point point = Point());
     ~ScorePoint();
     void _draw();
-    void draw();
 };
 
 #endif

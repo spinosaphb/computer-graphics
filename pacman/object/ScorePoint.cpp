@@ -16,17 +16,4 @@ void ScorePoint::_draw() {
     cube2.scale(1, .65, 1);
     cube1.draw();
     cube2.draw();
-
-    // glPushMatrix();
-    //     glScalef(.65, 1, .65);
-    //     drawCube();
-    // glPopMatrix();
-    // glPushMatrix();
-    //     glScalef(1, .65, 1);
-    //     drawCube();
-    // glPopMatrix();
-}
-
-void ScorePoint::draw() {
-    this->_draw();
 }

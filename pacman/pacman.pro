@@ -22,7 +22,10 @@ SOURCES += main.cpp \
     object/Sphere.cpp \
     object/Object.cpp \
     object/Cube.cpp \
-    object/ScorePoint.cpp
+    object/ScorePoint.cpp \
+    object/Fruit.cpp \
+    object/Circle.cpp \
+    object/Pacman.cpp
 
 HEADERS += \
     bib/Camera.h \
@@ -36,4 +39,7 @@ HEADERS += \
     object/Sphere.h \
     object/Object.h \
     object/Cube.h \
-    object/ScorePoint.h
+    object/ScorePoint.h \
+    object/Fruit.h \
+    object/Circle.h \
+    object/Pacman.h

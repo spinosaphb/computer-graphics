@@ -6,6 +6,9 @@ using namespace std;
 #include <Sphere.h>
 #include <Cube.h>
 #include <ScorePoint.h>
+#include <Fruit.h>
+#include <Circle.h>
+#include <Pacman.h>
 #include <model3ds.h>
 #include <array>
 #include <tuple>
@@ -190,98 +193,43 @@ void drawCube() {
 void drawPoint() {
     ScorePoint sp = ScorePoint();
     sp.draw();
-    // glPushMatrix();
-    //     glScalef(.65, 1, .65);
-    //     drawCube();
-    // glPopMatrix();
-    // glPushMatrix();
-    //     glScalef(1, .65, 1);
-    //     drawCube();
-    // glPopMatrix();
 }
 
 void drawFruit() {
-    glPushMatrix();
-        glRotatef(-30, 1, 1, 0);
-        glPushMatrix();
-            GUI::setColor(1, 0, .5);
-            glScalef(.3, .3, .3);
-            glTranslatef(-1, 0, 0);
-            drawPoint();
-        glPopMatrix();
-
-        glPushMatrix();
-            GUI::setColor(1, 0, .5);
-            glScalef(.3, .3, .3);
-            glTranslatef(2, 0, 0);
-            drawPoint();
-        glPopMatrix();
-
-        // draw cherry stalk
-        glPushMatrix();
-            GUI::setColor(0, 1, 0); // green color for stalk
-            glTranslatef(0, .8, 0);
-            glRotatef(-30, 0, 0, 1);
-            glScalef(.2, 2.5, .2);
-            glScalef(.3, .3, .3);
-            drawCube();
-        glPopMatrix();
-
-        // draw cherry stalk
-        glPushMatrix();
-            GUI::setColor(0, 1, 0); // green color for stalk
-            glTranslatef(.37, .5, 0);
-            glRotatef(45,0,0,1);
-            glScalef(.2, 1.6, .2);
-            glScalef(.3, .3, .3);
-            drawCube();
-        glPopMatrix();
-
-   glPopMatrix();
+    Fruit f = Fruit();
+    f.draw();
 }
 
 void drawSemiSphere(int slices = 100, int stacks = 100){
-    glPushMatrix();
-//        glColor3f(1.0, 1.0, 1.0);
-        GLdouble plane[4] = {0.0, 0.0, -1.0, 0.0};
-        glClipPlane(GL_CLIP_PLANE0, plane);
-        glEnable(GL_CLIP_PLANE0);
-
-        glutSolidSphere(raio, slices, stacks);
-        glDisable(GL_CLIP_PLANE0);
-    glPopMatrix();
+    Sphere s = Sphere(true);
+    s.draw();
 }
 
 void drawCircle(float cx, float cy, float ray, int stacks) {
-    glBegin(GL_POLYGON);
-        for (int i = 0; i < stacks; i++) {
-            float theta = 2.0f * 3.1415926f * float(i) / float(stacks);
-            float x = ray * cosf(theta);  // x-coordinate of the vertex
-            float y = ray * sinf(theta);  // y-coordinate of the vertex
-            glNormal3f(0, 0, 1);
-            glVertex2f(x + cx, y + cy);  // specify the vertex
-        }
-    glEnd();
+    Circle c = Circle(cx, cy, ray, stacks);
+    c.draw();
 }
 
 
 void drawPacmanBody(Color bc, Color mc = Color(0,0,0), float mouthAngle = 90) {
 
-    glPushMatrix();
-        GUI::setColor(bc.r, bc.g, bc.b);
-        drawSemiSphere();
+    // glPushMatrix();
+    //     GUI::setColor(bc.r, bc.g, bc.b);
+    //     drawSemiSphere();
 
-        GUI::setColor(mc.r, mc.g, mc.b);
-        drawCircle(0.0, 0.0, 0.5, 100);
+    //     GUI::setColor(mc.r, mc.g, mc.b);
+    //     drawCircle(0.0, 0.0, 0.5, 100);
 
-        glRotatef(mouthAngle, 1, 0, 0);
+    //     glRotatef(mouthAngle, 1, 0, 0);
 
-        GUI::setColor(bc.r, bc.g, bc.b);
-        drawSemiSphere();
+    //     GUI::setColor(bc.r, bc.g, bc.b);
+    //     drawSemiSphere();
 
-        GUI::setColor(mc.r, mc.g, mc.b);
-        drawCircle(0.0, 0.0, 0.5, 20);
-    glPopMatrix();
+    //     GUI::setColor(mc.r, mc.g, mc.b);
+    //     drawCircle(0.0, 0.0, 0.5, 20);
+    // glPopMatrix();
+    Pacman pacman = Pacman(bc);
+    pacman.draw();
 }
 
 
@@ -569,11 +517,12 @@ void draw() {
 //            drawCube();
 //        glPopMatrix();
 //    }
-    glPushMatrix();
-        glTranslatef(0,1,0);
-        drawPacManMap();
-    glPopMatrix();
-
+    // glPushMatrix();
+    //     glTranslatef(0,1,0);
+    //     drawPacManMap();
+    // glPopMatrix();
+    
+    drawPacmanBody(Color(1,1,0));
 
     GUI::displayEnd();
 }

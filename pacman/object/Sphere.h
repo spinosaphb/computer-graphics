@@ -5,20 +5,21 @@
 
 class Sphere : public Object {
 public:
-    Sphere();
-    Sphere(Color color);
-    Sphere(Color color, Point point);
-    Sphere(Color color, Point point, float radius);
-    // ~Sphere();
-    // Functions
+    Sphere(Color color = Sphere::DEFAULT_COLOR, bool semi = false, double radius = Sphere::DEFAULT_RADIUS, 
+           int slices = Sphere::DEFAULT_SLICES, int stacks = Sphere::DEFAULT_STACKS);
     void _draw();
-    void draw();
 
 private:
-    // Attributes
-    Color color;
-    Point point;
     float radius;
+    int slices;
+    int stacks;
+    bool semi;
+
+protected:
+    static const Color DEFAULT_COLOR;
+    static const int DEFAULT_SLICES;
+    static const int DEFAULT_STACKS;
+    static const double DEFAULT_RADIUS;
 };
 
 #endif

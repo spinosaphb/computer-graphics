@@ -1,9 +1,10 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <queue>
 #include <map>
 #include <string>
+#include <limits>
+#include <stack>
 
 using namespace std;
 
@@ -42,23 +43,29 @@ struct Matrix {
     ): t(t), r(r), s(s) {}
 };
 
+
+#define INFINITY numeric_limits<float>::infinity()
+
 class Object {
 public:
     Matrix matrix;
 
-    virtual void draw();
+    void draw(int unstacks = INFINITY);
     
-    void translate(float x, float y, float z);
-    void rotate(float angle, float x, float y, float z);
-    void scale(float x, float y, float z);
-
+    void translate(float x, float y, float z, bool prefixed = false);
+    void rotate(float angle, float x, float y, float z, bool prefixed = false);
+    void scale(float x, float y, float z, bool prefixed = false);
     Object();
 
 protected:
-    void addTransformation(Transformation, Point);
-    void applyTransformations();
-    void _draw();
-    queue<pair<Transformation, Point>> tqueue;
+    void setColor(Color);
+    void addTransformation(Transformation, Point, bool prefixed);
+    void applyPrefixTransformations();
+    void clearPrefixTransformations();
+    void applyTransformations(int unstacks = INFINITY);
+    virtual void _draw();
+    stack<pair<Transformation, Point>> tstack; // transformations stack
+    stack<pair<Transformation, Point>> ptstack; // prefixed transformations stack
     Color color;
 };
 

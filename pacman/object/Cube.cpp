@@ -51,10 +51,4 @@ void Cube::_draw() {
     glEnd();
 }
 
-void Cube::draw() {
-    glPushMatrix();
-        this->applyTransformations();
-        this->_draw();
-    glPopMatrix();
-}
 
