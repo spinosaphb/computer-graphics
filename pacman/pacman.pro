@@ -22,10 +22,16 @@ SOURCES += main.cpp \
     object/Sphere.cpp \
     object/Object.cpp \
     object/Cube.cpp \
-    object/ScorePoint.cpp \
+    object/Pill.cpp \
     object/Fruit.cpp \
     object/Circle.cpp \
-    object/Pacman.cpp
+    object/Pacman.cpp \
+    object/Cylinder.cpp \
+    object/Phantom.cpp \
+    object/Pyramid.cpp \
+    object/Triangle.cpp \
+    object/Gate.cpp \
+    object/Map.cpp
 
 HEADERS += \
     bib/Camera.h \
@@ -39,7 +45,13 @@ HEADERS += \
     object/Sphere.h \
     object/Object.h \
     object/Cube.h \
-    object/ScorePoint.h \
+    object/Pill.h \
     object/Fruit.h \
     object/Circle.h \
-    object/Pacman.h
+    object/Pacman.h \
+    object/Cylinder.h \
+    object/Phantom.h \
+    object/Pyramid.h \
+    object/Triangle.h \
+    object/Gate.h \
+    object/Map.h

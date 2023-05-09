@@ -2,8 +2,10 @@
 #include <GL/glut.h>
 #include <gui_glut/gui.h>
 
-Object::Object() {
+Object::Object(bool drawOrigin, float originSize) {
     this->tstack = std::stack<pair<Transformation, Point>>();
+    this->drawOrigin = drawOrigin;
+    this->originSize = originSize;
 }
 
 void Object::_draw() {
@@ -90,10 +92,13 @@ void Object::setColor(Color color) {
 
 
 void Object::draw(int unstacks) {
+    if(this->drawOrigin) GUI::drawOrigin(this->originSize);
     glPushMatrix();
-        this->setColor(this->color);
         this->applyPrefixTransformations();
-        this->applyTransformations(unstacks);
-        this->_draw();
+        glPushMatrix();
+            this->setColor(this->color);
+            this->applyTransformations(unstacks);
+            this->_draw();
+        glPopMatrix();
     glPopMatrix();
 }

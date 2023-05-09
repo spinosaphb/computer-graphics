@@ -64,10 +64,16 @@ SOURCES       = ../main.cpp \
 		../object/Sphere.cpp \
 		../object/Object.cpp \
 		../object/Cube.cpp \
-		../object/ScorePoint.cpp \
+		../object/Pill.cpp \
 		../object/Fruit.cpp \
 		../object/Circle.cpp \
-		../object/Pacman.cpp 
+		../object/Pacman.cpp \
+		../object/Cylinder.cpp \
+		../object/Phantom.cpp \
+		../object/Pyramid.cpp \
+		../object/Triangle.cpp \
+		../object/Gate.cpp \
+		../object/Map.cpp 
 OBJECTS       = main.o \
 		Camera.o \
 		CameraDistante.o \
@@ -80,10 +86,16 @@ OBJECTS       = main.o \
 		Sphere.o \
 		Object.o \
 		Cube.o \
-		ScorePoint.o \
+		Pill.o \
 		Fruit.o \
 		Circle.o \
-		Pacman.o
+		Pacman.o \
+		Cylinder.o \
+		Phantom.o \
+		Pyramid.o \
+		Triangle.o \
+		Gate.o \
+		Map.o
 DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -164,10 +176,16 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		object/Sphere.h \
 		object/Object.h \
 		object/Cube.h \
-		object/ScorePoint.h \
+		object/Pill.h \
 		object/Fruit.h \
 		object/Circle.h \
-		object/Pacman.h ../main.cpp \
+		object/Pacman.h \
+		object/Cylinder.h \
+		object/Phantom.h \
+		object/Pyramid.h \
+		object/Triangle.h \
+		object/Gate.h \
+		object/Map.h ../main.cpp \
 		../bib/Camera.cpp \
 		../bib/CameraDistante.cpp \
 		../bib/CameraJogo.cpp \
@@ -179,10 +197,16 @@ DIST          = /../lib64/qt5/mkspecs/features/spec_pre.prf \
 		../object/Sphere.cpp \
 		../object/Object.cpp \
 		../object/Cube.cpp \
-		../object/ScorePoint.cpp \
+		../object/Pill.cpp \
 		../object/Fruit.cpp \
 		../object/Circle.cpp \
-		../object/Pacman.cpp
+		../object/Pacman.cpp \
+		../object/Cylinder.cpp \
+		../object/Phantom.cpp \
+		../object/Pyramid.cpp \
+		../object/Triangle.cpp \
+		../object/Gate.cpp \
+		../object/Map.cpp
 QMAKE_TARGET  = pacman
 DESTDIR       = 
 TARGET        = pacman
@@ -389,10 +413,14 @@ main.o: ../main.cpp ../gui_glut/gui.h \
 		../object/Sphere.h \
 		../object/Object.h \
 		../object/Cube.h \
-		../object/ScorePoint.h \
+		../object/Pill.h \
+		../object/Pyramid.h \
 		../object/Fruit.h \
 		../object/Circle.h \
-		../object/Pacman.h
+		../object/Pacman.h \
+		../object/Phantom.h \
+		../object/Gate.h \
+		../object/Map.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 Camera.o: ../bib/Camera.cpp ../bib/Camera.h \
@@ -464,15 +492,17 @@ Cube.o: ../object/Cube.cpp ../object/Cube.h \
 		../object/Object.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Cube.o ../object/Cube.cpp
 
-ScorePoint.o: ../object/ScorePoint.cpp ../object/ScorePoint.h \
+Pill.o: ../object/Pill.cpp ../object/Pill.h \
 		../object/Object.h \
-		../object/Cube.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ScorePoint.o ../object/ScorePoint.cpp
+		../object/Cube.h \
+		../object/Pyramid.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pill.o ../object/Pill.cpp
 
 Fruit.o: ../object/Fruit.cpp ../object/Fruit.h \
 		../object/Object.h \
 		../object/Cube.h \
-		../object/ScorePoint.h \
+		../object/Pill.h \
+		../object/Pyramid.h \
 		../gui_glut/gui.h \
 		../gui_glut/extra.h \
 		../bib/CameraDistante.h \
@@ -500,6 +530,9 @@ Pacman.o: ../object/Pacman.cpp ../object/Pacman.h \
 		../object/Object.h \
 		../object/Sphere.h \
 		../object/Circle.h \
+		../object/Pill.h \
+		../object/Cube.h \
+		../object/Pyramid.h \
 		../gui_glut/gui.h \
 		../gui_glut/extra.h \
 		../bib/CameraDistante.h \
@@ -509,6 +542,78 @@ Pacman.o: ../object/Pacman.cpp ../object/Pacman.h \
 		../bib/Desenha.h \
 		../bib/model3ds.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pacman.o ../object/Pacman.cpp
+
+Cylinder.o: ../object/Cylinder.cpp ../object/Cylinder.h \
+		../object/Object.h \
+		../gui_glut/gui.h \
+		../gui_glut/extra.h \
+		../bib/CameraDistante.h \
+		../bib/Camera.h \
+		../bib/Vetor3D.h \
+		../bib/CameraJogo.h \
+		../bib/Desenha.h \
+		../bib/model3ds.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Cylinder.o ../object/Cylinder.cpp
+
+Phantom.o: ../object/Phantom.cpp ../object/Phantom.h \
+		../object/Object.h \
+		../object/Sphere.h \
+		../object/Cylinder.h \
+		../object/Circle.h \
+		../gui_glut/gui.h \
+		../gui_glut/extra.h \
+		../bib/CameraDistante.h \
+		../bib/Camera.h \
+		../bib/Vetor3D.h \
+		../bib/CameraJogo.h \
+		../bib/Desenha.h \
+		../bib/model3ds.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Phantom.o ../object/Phantom.cpp
+
+Pyramid.o: ../object/Pyramid.cpp ../object/Pyramid.h \
+		../object/Object.h \
+		../gui_glut/gui.h \
+		../gui_glut/extra.h \
+		../bib/CameraDistante.h \
+		../bib/Camera.h \
+		../bib/Vetor3D.h \
+		../bib/CameraJogo.h \
+		../bib/Desenha.h \
+		../bib/model3ds.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pyramid.o ../object/Pyramid.cpp
+
+Triangle.o: ../object/Triangle.cpp ../object/Triangle.h \
+		../object/Object.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Triangle.o ../object/Triangle.cpp
+
+Gate.o: ../object/Gate.cpp ../object/Gate.h \
+		../object/Object.h \
+		../object/Cube.h \
+		../object/Pyramid.h \
+		../object/Triangle.h \
+		../object/Circle.h \
+		../object/Sphere.h \
+		../object/Pill.h \
+		../gui_glut/gui.h \
+		../gui_glut/extra.h \
+		../bib/CameraDistante.h \
+		../bib/Camera.h \
+		../bib/Vetor3D.h \
+		../bib/CameraJogo.h \
+		../bib/Desenha.h \
+		../bib/model3ds.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Gate.o ../object/Gate.cpp
+
+Map.o: ../object/Map.cpp ../object/Map.h \
+		../object/Object.h \
+		../object/Cube.h \
+		../object/Pill.h \
+		../object/Pyramid.h \
+		../object/Gate.h \
+		../object/Pacman.h \
+		../object/Phantom.h \
+		../object/Fruit.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Map.o ../object/Map.cpp
 
 ####### Install
 

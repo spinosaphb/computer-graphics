@@ -55,7 +55,7 @@ public:
     void translate(float x, float y, float z, bool prefixed = false);
     void rotate(float angle, float x, float y, float z, bool prefixed = false);
     void scale(float x, float y, float z, bool prefixed = false);
-    Object();
+    Object(bool drawOrigin = false, float originSize = 2);
 
 protected:
     void setColor(Color);
@@ -67,6 +67,8 @@ protected:
     stack<pair<Transformation, Point>> tstack; // transformations stack
     stack<pair<Transformation, Point>> ptstack; // prefixed transformations stack
     Color color;
+    bool drawOrigin = false;
+    float originSize = 2;
 };
 
 #endif

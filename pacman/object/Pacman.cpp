@@ -1,10 +1,10 @@
 #include <Pacman.h>
 #include <Sphere.h>
 #include <Circle.h>
-#include <ScorePoint.h>
+#include <Pill.h>
 #include <gui_glut/gui.h>
 
-Pacman::Pacman(Color color, float mouthAngle) {
+Pacman::Pacman(Color color, bool drawOrigin, float originSize, float mouthAngle) : Object(drawOrigin, originSize) {
     this->color = color;
     this->topBody = TopBody(color);
     this->bottomBody = BottomBody(color);
@@ -43,7 +43,7 @@ void TopBody::_draw() {
 
     Sphere ssphere = Sphere(this->color, true);
     Circle circle = Circle(Color(0,0,0));
-    ScorePoint eye = ScorePoint(Color(0,0,0));
+    Pill eye = Pill(Color(0,0,0));
     
     ssphere.rotate(90, 1, 0, 0);
     ssphere.draw();
@@ -80,5 +80,5 @@ void BottomBody::_draw() {
     ssphere.draw();
 
     circle.rotate(-90, 1, 0, 0);
-    circle.draw();
+    circle.draw(); 
 }

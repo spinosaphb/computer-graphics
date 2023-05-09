@@ -19,7 +19,7 @@ public:
 
 class Pacman : public Object {
 public:
-    Pacman(Color color = Color(1,1,0), float mouthAngle = 60);
+    Pacman(Color color = Color(1,1,0), bool drawOrigin = false, float originSize = 2,  float mouthAngle = 60);
     ~Pacman();
     void _draw();
 
