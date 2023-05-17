@@ -18,7 +18,7 @@ class Phantom : public Object {
 public:
     Phantom(ghost::PhantomColor color = ghost::RED, bool drawOrigin = false, float originSize = 2);
     ~Phantom();
-    void _draw();
+    void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
 
 private:
     map<ghost::PhantomColor, Color> phantomColors = {
@@ -27,6 +27,7 @@ private:
         {ghost::BLUE, Color(1, 0.75, 0.79)},
         {ghost::ORANGE, Color(1, 0.65, 0)}
     };
+    ghost::PhantomColor colorFlag;
 };
 
 #endif

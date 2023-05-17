@@ -49,7 +49,7 @@ ghost::PhantomColor Map::phantomColors[] = {
     ghost::ORANGE
 };
 
-void Map::_draw() {
+void Map::_draw(set<Object*>& hierarchy) {
     // define the size of each cube
     // iterate over the pacmanMap matrix
     for(int i = 0; i < this->ROWS; i++)
@@ -59,42 +59,42 @@ void Map::_draw() {
 
             // determine the position of the cube based on the matrix indices
             float x = (j - 14) * this->size;
-            float z = (16 - i) * this->size;
+            float z = (15.5 - i) * this->size;
 
             // draw a cube if the value is 1, which represents a wall
-            (value == pmap::WALL) ? this->_drawWall(x, z, i) // draw wall
-                : (value == pmap::PILL) ? this->_drawPill(x, z) // draw pill
-                : (value == pmap::POWER_PILL) ? this->_drawPowerPill(x, z) // draw power pill
-                : (value == pmap::GATE) ? this->_drawGate(x, z) // draw gate
-                : (value == pmap::FRUIT) ? this->_drawFruit(x, z) // draw fruit
-                : (value == pmap::PACMAN) ? this->_drawPacman(x, z) // draw pacman
-                : (value >= pmap::PHANTOM && value <= pmap::PHANTOM+4) ? this->_drawPhantom(x, z, value) // draw phantom
+            (value == pmap::WALL) ? this->_drawWall(x, z, hierarchy) // draw wall
+                : (value == pmap::PILL) ? this->_drawPill(x, z, hierarchy) // draw pill
+                : (value == pmap::POWER_PILL) ? this->_drawPowerPill(x, z, hierarchy) // draw power pill
+                : (value == pmap::GATE) ? this->_drawGate(x, z, hierarchy) // draw gate
+                : (value == pmap::FRUIT) ? this->_drawFruit(x, z, hierarchy) // draw fruit
+                : (value == pmap::PACMAN) ? this->_drawPacman(x, z, hierarchy) // draw pacman
+                : (value >= pmap::PHANTOM && value <= pmap::PHANTOM+4) ? this->_drawPhantom(x, z, value, hierarchy) // draw phantom
                 : [](){}(); // do nothing
         }
 }
 
-void Map::_drawWall(float x, float z, int i){
-    Cube wall = Cube(Color(0.1+(i/40),0.1+(i/40),0.65+(i/40)));
+void Map::_drawWall(float x, float z, set<Object*>& hierarchy){
+    Cube wall = Cube(Color(0.1, 0.1, 0.65));
     wall.translate(x*2, 0, z*-2, true);
     wall.scale(this->size, this->size/1.5, this->size);
     wall.draw();
 }
 
-void Map::_drawPill(float x, float z){
+void Map::_drawPill(float x, float z, set<Object*>& hierarchy){
     Pill pill = Pill(Color(0.99, 1, 0));
     pill.translate(x*2, 0, z*-2, true);
     pill.scale(this->size/2, this->size/2, this->size/2);
     pill.draw();
 }
 
-void Map::_drawPowerPill(float x, float z){
+void Map::_drawPowerPill(float x, float z, set<Object*>& hierarchy){
     PowerPill pill = PowerPill(Color(0.99, 1, 0));
     pill.translate(x*2, 0, z*-2, true);
     pill.scale(this->size/2, this->size/2, this->size/2);
     pill.draw();
 }
 
-void Map::_drawGate(float x, float z){
+void Map::_drawGate(float x, float z, set<Object*>& hierarchy){
     Gate gate = Gate();
     gate.translate(x*2, 0, z*-2, true);
     gate.scale(this->size, this->size, this->size);
@@ -102,14 +102,14 @@ void Map::_drawGate(float x, float z){
     gate.draw();
 }
 
-void Map::_drawFruit(float x, float z){
+void Map::_drawFruit(float x, float z, set<Object*>& hierarchy){
     Fruit fruit = Fruit();
     fruit.translate(x*2, 0, z*-2, true);
     fruit.scale(0.15, 0.15, 0.15);
     fruit.draw();
 }
 
-void Map::_drawPacman(float x, float z){
+void Map::_drawPacman(float x, float z, set<Object*>& hierarchy){
     Pacman pacman = Pacman(Color(1,1,0));
     pacman.translate(x*2, 0, z*-2, true);
     pacman.scale(0.2, 0.2, 0.2);
@@ -117,7 +117,7 @@ void Map::_drawPacman(float x, float z){
     pacman.draw();
 }
 
-void Map::_drawPhantom(float x, float z, int value){
+void Map::_drawPhantom(float x, float z, int value, set<Object*>& hierarchy){
     Phantom phantom = Phantom(this->phantomColors[value-pmap::PHANTOM]);
     phantom.translate(x*2, 0, z*-2, true);
     phantom.scale(0.2, 0.2, 0.2);

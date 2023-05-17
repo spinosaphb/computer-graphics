@@ -12,6 +12,6 @@ Cylinder::Cylinder(Color color, float base, float top, float height, int slices,
 
 Cylinder::~Cylinder() {}
 
-void Cylinder::_draw() {
+void Cylinder::_draw(set<Object*>& hierarchy) {
     gluCylinder(gluNewQuadric(), this->base, this->top, this->height, this->slices, this->stacks);
 }

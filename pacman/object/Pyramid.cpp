@@ -3,12 +3,12 @@
 
 Pyramid::Pyramid(Color color) {
     this->color = color;
+    this->name = "Pyramid";
 }
 
 Pyramid::~Pyramid() {}
 
-void Pyramid::_draw() {
-    GUI::setColor(this->color.r, this->color.g, this->color.b);
+void Pyramid::_draw(set<Object*>& hierarchy) {
     glBegin(GL_POLYGON);
         glNormal3f(0,1,1);
         glVertex3f(1,0,1);

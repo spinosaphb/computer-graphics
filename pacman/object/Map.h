@@ -26,7 +26,7 @@ class Map : public Object {
 public:
     Map(float size = .1f, bool drawOrigin = false, float originSize = 2);
     ~Map();
-    void _draw();
+    void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
 private:
     float size;
 
@@ -36,13 +36,13 @@ private:
 
     static ghost::PhantomColor phantomColors[];
 
-    void _drawWall(float x, float z, int i);
-    void _drawPill(float x, float z);
-    void _drawPowerPill(float x, float z);
-    void _drawGate(float x, float z);
-    void _drawPhantom(float x, float z, int value);
-    void _drawPacman(float x, float z);
-    void _drawFruit(float x, float z);
+    void _drawWall(float x, float z, set<Object*>& hierarchy );
+    void _drawPill(float x, float z, set<Object*>& hierarchy );
+    void _drawPowerPill(float x, float z, set<Object*>& hierarchy );
+    void _drawGate(float x, float z, set<Object*>& hierarchy );
+    void _drawPhantom(float x, float z, int value, set<Object*>& hierarchy );
+    void _drawPacman(float x, float z, set<Object*>& hierarchy );
+    void _drawFruit(float x, float z, set<Object*>& hierarchy );
 
 };
 

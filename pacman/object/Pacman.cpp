@@ -13,7 +13,7 @@ Pacman::Pacman(Color color, bool drawOrigin, float originSize, float mouthAngle)
 
 Pacman::~Pacman() {}
 
-void Pacman::_draw() {
+void Pacman::_draw(set<Object*>& hierarchy) {
 
     static float mouthAngle = this->defaultMouthAngle;
     static bool mouthRotate = true;
@@ -30,8 +30,8 @@ void Pacman::_draw() {
         mouthAngle--;
     else if(!mouthRotate && mouthAngle < 60)
         mouthAngle++;
-    this->topBody.draw();
-    this->bottomBody.draw();
+    this->topBody.draw(INFINITY, hierarchy);
+    this->bottomBody.draw(INFINITY, hierarchy);
 }
 
 TopBody::TopBody(Color color) {
@@ -39,28 +39,28 @@ TopBody::TopBody(Color color) {
 }
 
 TopBody::~TopBody() {}
-void TopBody::_draw() {
+void TopBody::_draw(set<Object*>& hierarchy) {
 
     Sphere ssphere = Sphere(this->color, true);
     Circle circle = Circle(Color(0,0,0));
     Pill eye = Pill(Color(0,0,0));
     
     ssphere.rotate(90, 1, 0, 0);
-    ssphere.draw();
+    ssphere.draw(INFINITY, hierarchy);
 
     circle.rotate(90, 1, 0, 0);
-    circle.draw();
+    circle.draw(INFINITY, hierarchy);
     
     eye.scale(.1, .1, .1, true);
     eye.rotate(-60, 0 , 1, 0);
     eye.translate(0, 2, 4);
     eye.rotate(-25, 1, 0, 0);
-    eye.draw(3);
+    eye.draw(3, hierarchy);
 
     eye.rotate(60, 0 , 1, 0);
     eye.translate(0, 2, 4);
     eye.rotate(-25, 1, 0, 0);
-    eye.draw();
+    eye.draw(INFINITY, hierarchy);
 }
 
 
@@ -70,15 +70,15 @@ BottomBody::BottomBody(Color color) {
 
 BottomBody::~BottomBody() {}
 
-void BottomBody::_draw() {
+void BottomBody::_draw(set<Object*>& hierarchy) {
 
     Sphere ssphere = Sphere(this->color, true);
     Circle circle = Circle(Color(0,0,0));
     
 
     ssphere.rotate(-90, 1, 0, 0);
-    ssphere.draw();
+    ssphere.draw(INFINITY, hierarchy);
 
     circle.rotate(-90, 1, 0, 0);
-    circle.draw(); 
+    circle.draw(INFINITY, hierarchy); 
 }

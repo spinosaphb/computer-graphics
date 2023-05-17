@@ -7,7 +7,7 @@ class Cylinder : public Object {
 public:
     Cylinder(Color color = Color(1,0,0), float base = 1.0, float top = 1.0, float height = 1.5, int slices = 20, int stacks = 20);
     ~Cylinder();
-    void _draw();
+    void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
 private:
     float base;
     float top;

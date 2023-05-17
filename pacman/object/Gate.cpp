@@ -9,13 +9,14 @@
 #include <gui.h>
 
 Gate::Gate(Color color, bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
+    this->name = "Gate";
     this->color = color;
 }
 
 Gate::~Gate() {}
 
 
-void Gate::_drawFlag() {
+void Gate::_drawFlag(set<Object*>& hierarchy) {
     // flag
     Triangle t = Triangle(Color(.7, .7, .7),true);
 
@@ -39,43 +40,43 @@ void Gate::_drawFlag() {
         t.rotate(angle, 1, 0, 0);
         // end rotate
         t.scale(.2, .2, .2);
-        t.draw();
+        t.draw(INFINITY, hierarchy);
     }
     
 }
 
-void Gate::_draw() {
+void Gate::_draw(set<Object*>& hierarchy) {
 
     // flag
-    this->_drawFlag();
+    this->_drawFlag(hierarchy);
 
     // flag pole
     Pyramid p = Pyramid(Color(0.0, 0.5, 0.0));
     
     p.scale(.25,.25,.25, true);
     p.translate(-7,6,0);
-    p.draw();
+    p.draw(INFINITY, hierarchy);
 
     p.translate(7,6,0);
-    p.draw();
+    p.draw(INFINITY, hierarchy);
 
     // flag sphere
     Pill sp = Pill(Color(1.0, 0.75, 0.0));
     sp.scale(.25,.25,.25, true);
     sp.translate(-7,5,0);
-    sp.draw();
+    sp.draw(INFINITY, hierarchy);
 
     sp.translate(7,5,0);
-    sp.draw();
+    sp.draw(INFINITY, hierarchy);
 
     // gate
     Cube gate = Cube(Color(0, 0.39, 0.75));
     gate.scale(1, 1, .25, true);
     gate.translate(-1,0,0);
-    gate.draw();
+    gate.draw(INFINITY, hierarchy);
 
     gate.translate(1,0,0);
-    gate.draw();
+    gate.draw(INFINITY, hierarchy);
 
     // gate Brazilian flag
     std::array<std::tuple<int, int>, 4> gateDecPositions = {
@@ -92,20 +93,20 @@ void Gate::_draw() {
         Cube c = Cube(Color(0.0, 0.5, 0.0));
         c.scale(.8, .8, 0.1, true);
         c.translate(x,0,z);
-        c.draw();
+        c.draw(INFINITY, hierarchy);
 
         Triangle tr = Triangle(Color(1.0, 0.75, 0.0));
         tr.scale(0.75,0.75,0.75, true);
         tr.translate(0,0,.82/z);
         if(z<0) tr.rotate(180, 1, 0, 0);
         tr.rotate(90*x, 0, 0, 1);
-        tr.draw();
+        tr.draw(INFINITY, hierarchy);
 
         Circle ci = Circle(Color(0.0, 0.39, 0.75));
         ci.scale(1.15,1.15,1.15, true);
         ci.translate(0,0,.54/z);
         if(z<0) ci.rotate(180, 1, 0, 0);
-        ci.draw();
+        ci.draw(INFINITY, hierarchy);
     }
 
 }

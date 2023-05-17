@@ -9,7 +9,7 @@ public:
 
     ~Cube();
 
-    void _draw();
+    void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
 };
 
 #endif

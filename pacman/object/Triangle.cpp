@@ -8,11 +8,12 @@ Triangle::Triangle(Color color, bool doubleSided, Point p1, Point p2, Point p3, 
     this->p3 = p3;
     this->normal = normal;
     this->doubleSided = doubleSided;
+    this->name = "Triangle";
 }
 
 Triangle::~Triangle() {}
 
-void Triangle::_draw() {
+void Triangle::_draw(set<Object*>& hierarchy) {
     if (this->doubleSided)
         glDisable(GL_CULL_FACE);
     glBegin(GL_POLYGON);

@@ -7,7 +7,7 @@ class Sphere : public Object {
 public:
     Sphere(Color color = Sphere::DEFAULT_COLOR, bool semi = false, double radius = Sphere::DEFAULT_RADIUS, 
            int slices = Sphere::DEFAULT_SLICES, int stacks = Sphere::DEFAULT_STACKS);
-    void _draw();
+    void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
 
 private:
     float radius;

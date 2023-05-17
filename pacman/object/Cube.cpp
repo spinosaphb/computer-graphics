@@ -4,11 +4,12 @@
 Cube::Cube(Color color, Point point) : Object() {
     this->matrix.t = point;
     this->color = color;
+    this->name = "Cube";
 }
 
 Cube::~Cube() {}
 
-void Cube::_draw() {
+void Cube::_draw(set<Object*>& hierarchy) {
     glBegin(GL_QUADS);
         // Front face
         glNormal3f(0, 0, 1);

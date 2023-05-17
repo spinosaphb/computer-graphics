@@ -15,7 +15,7 @@ Sphere::Sphere(Color color, bool semi, double radius, int slices, int stacks) {
     this->semi = semi;
 }
 
-void Sphere::_draw() {
+void Sphere::_draw(set<Object*>& hierarchy) {
     if(!this->semi)
         glutSolidSphere(this->radius, this->slices, this->stacks);
     else {

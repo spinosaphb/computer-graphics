@@ -11,7 +11,7 @@ public:
         float cx = 0, float cy = 0,
         double radius = Circle::DEFAULT_RADIUS,
         int stacks = Circle::DEFAULT_STACKS);
-    void _draw();
+    void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
 
 private:
     // Attributes

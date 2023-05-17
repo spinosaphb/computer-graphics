@@ -11,7 +11,7 @@ public:
         Point normal = Point(0,1,1)
     );
     ~Triangle();
-    void _draw();
+    void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
 private:
     Point p1, p2, p3, normal;
     bool doubleSided;
