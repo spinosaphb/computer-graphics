@@ -3,7 +3,7 @@
 
 Pyramid::Pyramid(Color color) {
     this->color = color;
-    this->name = "Pyramid";
+    this->selfType = ObjectType::PYRAMID;
 }
 
 Pyramid::~Pyramid() {}

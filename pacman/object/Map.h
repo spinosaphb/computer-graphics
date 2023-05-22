@@ -24,7 +24,7 @@ namespace pmap {
 
 class Map : public Object {
 public:
-    Map(float size = .1f, bool drawOrigin = false, float originSize = 2);
+    Map(bool drawOrigin = false, float originSize = 2, float size = .1f);
     ~Map();
     void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
 private:

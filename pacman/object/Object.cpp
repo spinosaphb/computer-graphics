@@ -68,6 +68,7 @@ void Object::applyTransformation(pair<Transformation, Point> tp){
     }
 }
 
+
 void Object::addTransformation(Transformation t, Point p, TTransformation tt) {
     (   tt == PREFIXED 
         ? this->ptstack : tt == STANDARD 
@@ -87,44 +88,53 @@ void Object::scale(float x, float y, float z, bool prefixed) {
     this->addTransformation(SCALE, Point(x, y, z), prefixed ? PREFIXED : STANDARD);
 }
 
-void Object::mtranslate(float x, float y, float z) {
-    Point p = Point(x, y, z);
-    this->matrix.t += p;
-    this->addTransformation(TRANSLATE, p, TSTATIC);
-}
-
-void Object::mrotate(float angle, float x, float y, float z) {
-    Point p = Point(x, y, z, angle);
-    this->matrix.r += p;
-    this->addTransformation(ROTATE, p, TSTATIC);
-}
-
-void Object::mscale(float x, float y, float z) {
-    Point p = Point(x, y, z);
-    this->matrix.s += p;
-    this->addTransformation(SCALE, p, TSTATIC);
-}
-
 void Object::setColor(Color color) {
     GUI::setColor(color.r, color.g, color.b);
 }
 
 
-void Object::draw(int unstacks, set<Object*>& hierarchy) {
-    if(this->drawOrigin) GUI::drawOrigin(this->originSize);
-    hierarchy.insert(this);
-    cout << "(draw): selected object pointer: " << Object::selectedObject 
-        << " | " << "gate pointer: " << this->printHierarchy(hierarchy) << " | " << this->name << endl;
+void Object::applyMatrixTransformations() {
+    applyTransformation(pair<Transformation, Point>(TRANSLATE, this->matrix.t));
+    applyTransformation(
+        pair<Transformation, 
+        Point>(ROTATE, Point(0, 0, 1, this->matrix.r.z))
+    );
+    applyTransformation(
+        pair<Transformation, 
+        Point>(ROTATE, Point(0, 1, 0, this->matrix.r.y))
+    );
+    applyTransformation(
+        pair<Transformation, 
+        Point>(ROTATE, Point(1, 0, 0, this->matrix.r.x))
+    );
+    applyTransformation(pair<Transformation, Point>(SCALE, this->matrix.s)); 
+}
 
-    if(hierarchy.find(this->selectedObject) != hierarchy.end())
-        this->setColor(Color(1,1,1));
-    else
+void Object::applyFeatures(set<Object*>& hierarchy) {
+    if(hierarchy.find(this->selectedObject) != hierarchy.end()){
+        if(this->drawOrigin)
+            GUI::drawOrigin(this->originSize);
+        if((*hierarchy.begin())->transformColor)
+            this->setColor(Color(1,.6,0));
+        else this->setColor(Color(1,1,1));
+    }else
         this->setColor(this->color);
+}
+
+void Object::draw(int unstacks, set<Object*>& hierarchy) {
+    hierarchy.insert(this);
+    // cout << "(draw): selected object pointer: " << Object::selectedObject 
+    //     << " | " << "gate pointer: " << this->printHierarchy(hierarchy) << " | " << this->name << endl;
+
     glPushMatrix();
-        this->applyPrefixTransformations();
         glPushMatrix();
-            this->applyTransformations(unstacks);
-            this->_draw(hierarchy);
+            this->applyPrefixTransformations();
+            glPushMatrix();
+                this->applyTransformations(unstacks);
+                this->applyFeatures(hierarchy);
+                this->applyMatrixTransformations();
+                this->_draw(hierarchy);
+            glPopMatrix();
         glPopMatrix();
     glPopMatrix();
 }

@@ -7,7 +7,7 @@ Circle::Circle(Color color, float cx, float cy, double radius, int stacks) {
     this->radius = radius;
     this->stacks = stacks;
     this->color = color;
-    this->name = "Circle";
+    this->selfType = ObjectType::CIRCLE;
 }
 
 void Circle::_draw(set<Object*>& hierarchy) {

@@ -1,8 +1,9 @@
 #include <Map.h>
 
 
-Map::Map(float size, bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
+Map::Map(bool drawOrigin, float originSize, float size) : Object(drawOrigin, originSize) {
     this->size = size;
+    this->selfType = ObjectType::MAP;
 }
 
 Map::~Map() {}
@@ -77,21 +78,21 @@ void Map::_drawWall(float x, float z, set<Object*>& hierarchy){
     Cube wall = Cube(Color(0.1, 0.1, 0.65));
     wall.translate(x*2, 0, z*-2, true);
     wall.scale(this->size, this->size/1.5, this->size);
-    wall.draw();
+    wall.draw(INFINITY, hierarchy);
 }
 
 void Map::_drawPill(float x, float z, set<Object*>& hierarchy){
     Pill pill = Pill(Color(0.99, 1, 0));
     pill.translate(x*2, 0, z*-2, true);
     pill.scale(this->size/2, this->size/2, this->size/2);
-    pill.draw();
+    pill.draw(INFINITY, hierarchy);
 }
 
 void Map::_drawPowerPill(float x, float z, set<Object*>& hierarchy){
     PowerPill pill = PowerPill(Color(0.99, 1, 0));
     pill.translate(x*2, 0, z*-2, true);
     pill.scale(this->size/2, this->size/2, this->size/2);
-    pill.draw();
+    pill.draw(INFINITY, hierarchy);
 }
 
 void Map::_drawGate(float x, float z, set<Object*>& hierarchy){
@@ -99,27 +100,27 @@ void Map::_drawGate(float x, float z, set<Object*>& hierarchy){
     gate.translate(x*2, 0, z*-2, true);
     gate.scale(this->size, this->size, this->size);
     gate.translate(1,0,0);
-    gate.draw();
+    gate.draw(INFINITY, hierarchy);
 }
 
 void Map::_drawFruit(float x, float z, set<Object*>& hierarchy){
     Fruit fruit = Fruit();
     fruit.translate(x*2, 0, z*-2, true);
     fruit.scale(0.15, 0.15, 0.15);
-    fruit.draw();
+    fruit.draw(INFINITY, hierarchy);
 }
 
 void Map::_drawPacman(float x, float z, set<Object*>& hierarchy){
-    Pacman pacman = Pacman(Color(1,1,0));
+    Pacman pacman = Pacman();
     pacman.translate(x*2, 0, z*-2, true);
     pacman.scale(0.2, 0.2, 0.2);
     pacman.rotate(-90, 0, 1, 0);
-    pacman.draw();
+    pacman.draw(INFINITY, hierarchy);
 }
 
 void Map::_drawPhantom(float x, float z, int value, set<Object*>& hierarchy){
     Phantom phantom = Phantom(this->phantomColors[value-pmap::PHANTOM]);
     phantom.translate(x*2, 0, z*-2, true);
     phantom.scale(0.2, 0.2, 0.2);
-    phantom.draw();
+    phantom.draw(INFINITY, hierarchy);
 }

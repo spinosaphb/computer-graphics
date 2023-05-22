@@ -8,6 +8,7 @@ Cylinder::Cylinder(Color color, float base, float top, float height, int slices,
     this->height = height;
     this->slices = slices;
     this->stacks = stacks;
+    this->selfType = ObjectType::CYLINDER;
 }
 
 Cylinder::~Cylinder() {}

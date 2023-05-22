@@ -3,7 +3,7 @@
 
 Pill::Pill(Color color, bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
     this->color = color;
-    this->name = "Pill";
+    this->selfType = ObjectType::PILL;
 }
 
 Pill::~Pill() {}
@@ -22,6 +22,7 @@ PowerPill::PowerPill(Color color, bool drawOrigin, float originSize) : Object(dr
     this->color = color;
     this->pill = Pill(color);
     this->_makeAnimation();
+    this->selfType = ObjectType::POWER_PILL;
 }
 
 PowerPill::~PowerPill() {}
@@ -66,7 +67,7 @@ void PowerPill::_draw(set<Object*>& hierarchy) {
     pyramid.translate(distance, 0, 0);
     pyramid.rotate(-90, 0, 0, 1);
     pyramid.scale(.5, .5, .5);
-    pyramid.draw();
+    pyramid.draw(INFINITY, hierarchy);
 
     // front spike
     pyramid.translate(0, 0, distance);

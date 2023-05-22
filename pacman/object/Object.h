@@ -7,6 +7,7 @@
 #include <stack>
 #include <iostream>
 #include <set>
+#include <climits>
 
 using namespace std;
 
@@ -22,6 +23,13 @@ enum TTransformation {
     TSTATIC
 };
 
+
+namespace paxis {
+    enum PA {
+        X, Y, Z, A
+    };
+};
+
 struct Point {
     float x;
     float y;
@@ -34,6 +42,14 @@ struct Point {
         this->x += p.x;
         this->y += p.y;
         this->z += p.z;
+    }
+
+    Point operator*(const int& i){
+        return Point(this->x*i, this->y*i, this->z*i);
+    } 
+
+    float& operator[](paxis::PA pa){
+        return pa == paxis::X ? this->x : pa == paxis::Y ? this->y : pa == paxis::Z ? this->z : this->a;
     }
 };
 
@@ -51,14 +67,29 @@ struct Matrix {
     Point s;
 
     Matrix(
-        Point t=Point(1,1,1),
-        Point r=Point(1,1,1),
+        Point t=Point(0,0,0),
+        Point r=Point(0,0,0),
         Point s=Point(1,1,1)
     ): t(t), r(r), s(s) {}
 };
 
+enum ObjectType {
+    FRUIT,
+    GATE,
+    MAP,
+    PACMAN,
+    PHANTOM,
+    PILL,
+    POWER_PILL,
+    CIRCLE,
+    CYLINDER,
+    SPHERE,
+    CUBE,
+    TRIANGLE,
+    PYRAMID,
+};
 
-#define INFINITY numeric_limits<float>::infinity()
+#define INFINITY INT_MAX
 
 class Object {
 public:
@@ -67,11 +98,12 @@ public:
     void translate(float x, float y, float z, bool prefixed = false);
     void rotate(float angle, float x, float y, float z, bool prefixed = false);
     void scale(float x, float y, float z, bool prefixed = false);
-    
-    void mtranslate(float x, float y, float z);
-    void mrotate(float angle, float x, float y, float z);
-    void mscale(float x, float y, float z);
-    
+
+    // void mtranslate(float x, float y, float z);
+    // void mrotate(float angle, float x, float y, float z);
+    // void mscale(float x, float y, float z);
+
+    bool transformColor = false;
 
     Object(bool drawOrigin = false, float originSize = 2);
 
@@ -88,19 +120,21 @@ protected:
     void applyPrefixTransformations();
     void clearPrefixTransformations();
     void applyTransformations(int unstacks = INFINITY);
+    void applyMatrixTransformations();
+    void applyFeatures(set<Object*>& hierarchy);
     void applyTransformation(pair<Transformation, Point> tp);
     virtual void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
     stack<pair<Transformation, Point>> tstack; // transformations stack
     stack<pair<Transformation, Point>> ptstack; // prefixed transformations stack
     static stack<pair<Transformation, Point>> ststack; // static stack
     Color color;
-    bool drawOrigin = false;
     float originSize = 2;
+    bool drawOrigin = false;
     float moveFactor = 0.1;
 
 public:
     static Object* selectedObject;
-    string name;
+    ObjectType selfType;
 
 private:
     static string printHierarchy(set<Object*>& hierarchy);

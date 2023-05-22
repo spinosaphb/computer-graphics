@@ -8,7 +8,7 @@ Triangle::Triangle(Color color, bool doubleSided, Point p1, Point p2, Point p3, 
     this->p3 = p3;
     this->normal = normal;
     this->doubleSided = doubleSided;
-    this->name = "Triangle";
+    this->selfType = ObjectType::TRIANGLE;
 }
 
 Triangle::~Triangle() {}

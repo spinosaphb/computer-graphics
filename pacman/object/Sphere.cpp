@@ -13,6 +13,7 @@ Sphere::Sphere(Color color, bool semi, double radius, int slices, int stacks) {
     this->stacks = stacks;
     this->color = color;
     this->semi = semi;
+    this->selfType = ObjectType::SPHERE;
 }
 
 void Sphere::_draw(set<Object*>& hierarchy) {

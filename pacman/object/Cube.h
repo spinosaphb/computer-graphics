@@ -5,7 +5,7 @@
 
 class Cube : public Object {
 public:
-    Cube(Color color = Color(0.1,0.1,0.6), Point point = Point());
+    Cube(Color color = Color(0.1,0.1,0.6), Point point = Point(), bool drawOrigin = false, float originSize = 2);
 
     ~Cube();
 

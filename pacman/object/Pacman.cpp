@@ -4,11 +4,12 @@
 #include <Pill.h>
 #include <gui_glut/gui.h>
 
-Pacman::Pacman(Color color, bool drawOrigin, float originSize, float mouthAngle) : Object(drawOrigin, originSize) {
-    this->color = color;
+Pacman::Pacman(bool drawOrigin, float originSize, float mouthAngle) : Object(drawOrigin, originSize) {
+    this->color = Color(1,1,0);
     this->topBody = TopBody(color);
     this->bottomBody = BottomBody(color);
     this->defaultMouthAngle = mouthAngle;
+    this->selfType = ObjectType::PACMAN;
 }
 
 Pacman::~Pacman() {}

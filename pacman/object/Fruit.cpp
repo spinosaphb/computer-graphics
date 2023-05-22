@@ -1,9 +1,8 @@
 #include <Fruit.h>
 #include <gui_glut/gui.h>
 
-Fruit::Fruit(Color cherryColor, Color stalkColor, bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
-    this->cherryColor = cherryColor;
-    this->stalkColor = stalkColor;
+Fruit::Fruit(bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
+    this->selfType = ObjectType::FRUIT;
 }
 
 Fruit::~Fruit() {}

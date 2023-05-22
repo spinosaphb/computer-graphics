@@ -7,7 +7,7 @@
 
 class Gate : public Object {
 public:
-    Gate(Color color = Color(1,0,0), bool drawOrigin = false, float originSize = 2);
+    Gate(bool drawOrigin = false, float originSize = 2);
     ~Gate();
     void _draw(set<Object*>& hierarchy = *(new set<Object*>()));
 private:

@@ -1,10 +1,10 @@
 #include "Cube.h"
 #include <GL/glut.h>
 
-Cube::Cube(Color color, Point point) : Object() {
+Cube::Cube(Color color, Point point, bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
     this->matrix.t = point;
     this->color = color;
-    this->name = "Cube";
+    this->selfType = ObjectType::CUBE;
 }
 
 Cube::~Cube() {}

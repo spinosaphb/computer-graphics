@@ -7,6 +7,7 @@
 Phantom::Phantom(ghost::PhantomColor color, bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
     this->color = this->phantomColors.at(color);
     this->colorFlag = color;
+    this->selfType = ObjectType::PHANTOM;
 }
 
 Phantom::~Phantom() {}

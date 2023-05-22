@@ -8,9 +8,9 @@
 #include <tuple>
 #include <gui.h>
 
-Gate::Gate(Color color, bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
-    this->name = "Gate";
-    this->color = color;
+Gate::Gate(bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
+    this->color = Color(1,0,0);
+    this->selfType = ObjectType::GATE;
 }
 
 Gate::~Gate() {}
