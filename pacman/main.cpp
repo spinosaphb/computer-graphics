@@ -18,6 +18,9 @@ using namespace std;
 #include <tuple>
 #include <vector>
 
+#include <fstream>
+#include <sstream>
+
 float px = 0.0;
 float py = 0.0;
 float raio = 0.5;
@@ -25,30 +28,70 @@ float theta = 0.0;
 #define WIDTH 7.0
 #define HEIGHT 9.0
 
+vector<pair<ObjectType, Object*>> getScenario();
+vector<pair<ObjectType, Object*>> objects = getScenario();
+
 static bool enable_select = false;
 static bool& enable_transform = glutGUI::trans_obj;
 static float tfactor = 2;
+static int object_idx = 0;
 
-vector<pair<ObjectType, Object*>> getScenario(){
-    return {
-        make_pair(CUBE, new Cube(Color(0.1, 0.1, 0.65), Point(), true)),
-        make_pair(PILL, new Pill(Color(0.99, 1, 0), true)),
-        make_pair(POWER_PILL, new PowerPill(Color(0.99, 1, 0), true)),
-        make_pair(FRUIT, new Fruit(true)),
-        make_pair(PHANTOM, new Phantom(ghost::RED, true)),
-        make_pair(PHANTOM, new Phantom(ghost::PINK, true)),
-        make_pair(PHANTOM, new Phantom(ghost::BLUE, true)),
-        make_pair(PHANTOM, new Phantom(ghost::ORANGE, true)),
-        make_pair(PACMAN, new Pacman(true)),
-        make_pair(GATE, new Gate(true)),
-        make_pair(MAP, new Map(true))
-    };
+static string OBJECTS_FILENAME = "objects.pacman";
+
+
+string handleObjectName(pair<ObjectType, Object*>& obj){
+    stringstream ss;
+    if (obj.first == PHANTOM) ss << obj.first << " " << ((Phantom*) obj.second)->colorFlag;
+    else ss << obj.first;
+    return ss.str();
 }
 
-vector<pair<ObjectType, Object*>> objects = getScenario();
+void serializeObjects(vector<pair<ObjectType, Object*>>& objects, string filename = OBJECTS_FILENAME){
+    ofstream file;
+    file.open(filename);
+    for(auto& obj : objects)
+        file << handleObjectName(obj) << endl << *(obj.second) << endl;
+    file.close();
+}
 
+void deserializeObjects(vector<pair<ObjectType, Object*>>& objects, string filename = OBJECTS_FILENAME){
+    ifstream file;
+    string line;
+    int type_;
+    Object* obj;
 
-static int object_idx = 0;
+    file.open(filename);
+
+    for(auto& obj : objects) 
+        delete obj.second;
+    objects.clear();
+
+    while(getline(file, line)){
+        stringstream ss(line);
+        ss >> type_;
+        ObjectType type_obj = (ObjectType) type_;
+        if(type_obj == PHANTOM){
+            int colorFlag; 
+            ss >> colorFlag;
+            obj = new Phantom((ghost::PhantomColor) colorFlag);
+        } else {
+            obj = (type_obj == CUBE) ?  (Object*) new Cube(Color(0.1, 0.1, 0.65), Point(), true)
+                : (type_obj == PILL) ? (Object*) new Pill(Color(0.99, 1, 0), true)
+                : (type_obj == POWER_PILL) ? (Object*) new PowerPill(Color(0.99, 1, 0), true)
+                : (type_obj == FRUIT) ? (Object*) new Fruit(true)
+                : (type_obj == PACMAN) ? (Object*) new Pacman(true)
+                : (type_obj == GATE) ? (Object*) new Gate(true)
+                : (type_obj == MAP) ? (Object*) new Map(true)
+                : nullptr;
+            if (obj == nullptr) continue;
+        }
+        getline(file, line);
+        stringstream(line) >> *obj;
+        objects.push_back(make_pair(type_obj, obj));
+    }
+
+    file.close();
+}
 
 void drawWall(Cube& cube) {
     cube.translate(2.5, .25, 2);
@@ -205,18 +248,18 @@ void teclado(unsigned char tecla, int mx, int my) {
         if(enable_select) {
             auto current = objects[object_idx].second;
             
-            void* new_obj = (current->selfType == CUBE) ?  (void*) new Cube((Cube&)*current)
-                : (current->selfType == PILL) ? (void*) new Pill((Pill&)*current)
-                : (current->selfType == POWER_PILL) ? (void*) new PowerPill((PowerPill&)*current)
-                : (current->selfType == FRUIT) ? (void*) new Fruit((Fruit&)*current)
-                : (current->selfType == PHANTOM) ? (void*) new Phantom((Phantom&)*current)
-                : (current->selfType == PACMAN) ? (void*) new Pacman((Pacman&)*current)
-                : (current->selfType == GATE) ? (void*) new Gate((Gate&)*current)
-                : (current->selfType == MAP) ? (void*) new Map((Map&)*current)
+            Object* new_obj = (current->selfType == CUBE) ?  (Object*) new Cube((Cube&)*current)
+                : (current->selfType == PILL) ? (Object*) new Pill((Pill&)*current)
+                : (current->selfType == POWER_PILL) ? (Object*)new PowerPill((PowerPill&)*current)
+                : (current->selfType == FRUIT) ? (Object*) new Fruit((Fruit&)*current)
+                : (current->selfType == PHANTOM) ? (Object*) new Phantom((Phantom&)*current)
+                : (current->selfType == PACMAN) ? (Object*) new Pacman((Pacman&)*current)
+                : (current->selfType == GATE) ? (Object*) new Gate((Gate&)*current)
+                : (current->selfType == MAP) ? (Object*) new Map((Map&)*current)
                 : nullptr;
 
             if(new_obj != nullptr)
-                objects.push_back(make_pair(current->selfType, (Object*) new_obj));
+                objects.push_back(make_pair(current->selfType, new_obj));
         }    
         break;
     
@@ -231,10 +274,46 @@ void teclado(unsigned char tecla, int mx, int my) {
     case '9': objects.push_back(make_pair(PACMAN, new Pacman())); break;
     case '0': objects.push_back(make_pair(GATE, new Gate())); break;
     case '-': objects.push_back(make_pair(MAP, new Map())); break;
-        
+    
+    case '@':
+        glutGUI::cam->e.x=5.06411;
+        glutGUI::cam->e.y=3.94752;
+        glutGUI::cam->e.z=-8.30746;
+        glutGUI::cam->c.x=-0.0244603;
+        glutGUI::cam->c.y=0.244507;
+        glutGUI::cam->c.z=-1.19101;
+        glutGUI::cam->u.x=-0.226721;
+        glutGUI::cam->u.y=0.920903;
+        glutGUI::cam->u.z=0.317072;
+        break;
+
+    case '$':
+        serializeObjects(objects);
+        break;
+
+    case '%':
+        deserializeObjects(objects);
+        break;
+    
     default:
         break;
     }
+}
+
+vector<pair<ObjectType, Object*>> getScenario(){
+    return {
+        make_pair(CUBE, new Cube(Color(0.1, 0.1, 0.65), Point(), true)),
+        make_pair(PILL, new Pill(Color(0.99, 1, 0), true)),
+        make_pair(POWER_PILL, new PowerPill(Color(0.99, 1, 0), true)),
+        make_pair(FRUIT, new Fruit(true)),
+        make_pair(PHANTOM, new Phantom(ghost::RED, true)),
+        make_pair(PHANTOM, new Phantom(ghost::PINK, true)),
+        make_pair(PHANTOM, new Phantom(ghost::BLUE, true)),
+        make_pair(PHANTOM, new Phantom(ghost::ORANGE, true)),
+        make_pair(PACMAN, new Pacman(true)),
+        make_pair(GATE, new Gate(true)),
+        make_pair(MAP, new Map(true))
+    };
 }
 
 int main()

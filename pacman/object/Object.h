@@ -71,6 +71,21 @@ struct Matrix {
         Point r=Point(0,0,0),
         Point s=Point(1,1,1)
     ): t(t), r(r), s(s) {}
+
+    friend std::ostream& operator<<(std::ostream& os, const Matrix& obj){
+        os << "t[ " << obj.t.x << " " << obj.t.y << " " << obj.t.z << " ]\t";
+        os << "r[ " << obj.r.x << " " << obj.r.y << " " << obj.r.z << " ]\t";
+        os << "s[ " << obj.s.x << " " << obj.s.y << " " << obj.s.z << " ]";
+        return os;
+    }
+
+    friend std::istream& operator>>(std::istream& is, Matrix& obj) {
+        string dummy;
+        is >> dummy; is >> obj.t.x >> obj.t.y >> obj.t.z; is >> dummy;
+        is >> dummy; is >> obj.r.x >> obj.r.y >> obj.r.z; is >> dummy;
+        is >> dummy; is >> obj.s.x >> obj.s.y >> obj.s.z; is >> dummy;
+        return is;
+    }
 };
 
 enum ObjectType {
@@ -99,22 +114,20 @@ public:
     void rotate(float angle, float x, float y, float z, bool prefixed = false);
     void scale(float x, float y, float z, bool prefixed = false);
 
-    // void mtranslate(float x, float y, float z);
-    // void mrotate(float angle, float x, float y, float z);
-    // void mscale(float x, float y, float z);
-
     bool transformColor = false;
 
     Object(bool drawOrigin = false, float originSize = 2);
 
     Point& operator[](Transformation t);
+    friend std::ostream& operator<<(std::ostream& os, const Object& obj);
+    friend std::istream& operator>>(std::istream& is, Object& obj);
 
     static void selectObject(Object* object) {
         selectedObject = object;
     }
 
-protected:
     Matrix matrix;
+protected:
     void setColor(Color);
     void addTransformation(Transformation, Point, TTransformation);
     void applyPrefixTransformations();

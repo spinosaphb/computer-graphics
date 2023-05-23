@@ -131,8 +131,8 @@ void Object::draw(int unstacks, set<Object*>& hierarchy) {
             this->applyPrefixTransformations();
             glPushMatrix();
                 this->applyTransformations(unstacks);
-                this->applyFeatures(hierarchy);
                 this->applyMatrixTransformations();
+                this->applyFeatures(hierarchy);
                 this->_draw(hierarchy);
             glPopMatrix();
         glPopMatrix();
@@ -148,6 +148,16 @@ Point& Object::operator[](Transformation t) {
     case SCALE:
         return this->selectedObject->matrix.s;
     }
+}
+
+std::ostream& operator<<(std::ostream& os, const Object& obj) {
+    os << obj.matrix;
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, Object& obj) {
+    is >> obj.matrix;
+    return is;
 }
 
 string Object::printHierarchy(set<Object*>& hierarchy) {

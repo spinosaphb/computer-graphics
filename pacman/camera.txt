@@ -1,0 +1,10 @@
+glutGUI::cam->e.x=5.06411
+glutGUI::cam->e.y=3.94752
+glutGUI::cam->e.z=-8.30746
+glutGUI::cam->c.x=-0.0244603
+glutGUI::cam->c.y=0.244507
+glutGUI::cam->c.z=-1.19101
+glutGUI::cam->u.x=-0.226721
+glutGUI::cam->u.y=0.920903
+glutGUI::cam->u.z=0.317072
+
