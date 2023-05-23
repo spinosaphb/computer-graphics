@@ -31,7 +31,7 @@ SOURCES += main.cpp \
     object/Pyramid.cpp \
     object/Triangle.cpp \
     object/Gate.cpp \
-    object/Map.cpp
+    object/Map.cpp 
 
 HEADERS += \
     bib/Camera.h \

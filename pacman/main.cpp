@@ -25,19 +25,49 @@ float px = 0.0;
 float py = 0.0;
 float raio = 0.5;
 float theta = 0.0;
-#define WIDTH 7.0
-#define HEIGHT 9.0
+#define WIDTH 10
+#define HEIGHT 10
 
+vector<CameraDistante> getCameras();
 vector<pair<ObjectType, Object*>> getScenario();
+
+vector<CameraDistante> cameras = getCameras();
 vector<pair<ObjectType, Object*>> objects = getScenario();
 
 static bool enable_select = false;
 static bool& enable_transform = glutGUI::trans_obj;
 static float tfactor = 2;
+
 static int object_idx = 0;
+static int camera_idx = 0;
 
 static string OBJECTS_FILENAME = "objects.pacman";
 
+void writeCamDebug()
+{
+  std::ofstream myfile;
+
+  myfile.open("camera.txt", std::ofstream::out | std::ofstream::app); // Open the file in append mode
+
+  if (myfile.is_open())
+  {
+    myfile << "glutGUI::cam->e.x=" << glutGUI::cam->e.x << "\n";
+    myfile << "glutGUI::cam->e.y=" << glutGUI::cam->e.y << "\n";
+    myfile << "glutGUI::cam->e.z=" << glutGUI::cam->e.z << "\n";
+    myfile << "glutGUI::cam->c.x=" << glutGUI::cam->c.x << "\n";
+    myfile << "glutGUI::cam->c.y=" << glutGUI::cam->c.y << "\n";
+    myfile << "glutGUI::cam->c.z=" << glutGUI::cam->c.z << "\n";
+    myfile << "glutGUI::cam->u.x=" << glutGUI::cam->u.x << "\n";
+    myfile << "glutGUI::cam->u.y=" << glutGUI::cam->u.y << "\n";
+    myfile << "glutGUI::cam->u.z=" << glutGUI::cam->u.z << "\n";
+    myfile.close(); // Close the file
+    std::cout << "Camera salva" << std::endl;
+  }
+  else
+  {
+    std::cout << "Erro ao abrir arquivo" << std::endl;
+  }
+}
 
 string handleObjectName(pair<ObjectType, Object*>& obj){
     stringstream ss;
@@ -276,15 +306,8 @@ void teclado(unsigned char tecla, int mx, int my) {
     case '-': objects.push_back(make_pair(MAP, new Map())); break;
     
     case '@':
-        glutGUI::cam->e.x=5.06411;
-        glutGUI::cam->e.y=3.94752;
-        glutGUI::cam->e.z=-8.30746;
-        glutGUI::cam->c.x=-0.0244603;
-        glutGUI::cam->c.y=0.244507;
-        glutGUI::cam->c.z=-1.19101;
-        glutGUI::cam->u.x=-0.226721;
-        glutGUI::cam->u.y=0.920903;
-        glutGUI::cam->u.z=0.317072;
+        camera_idx = ++camera_idx > cameras.size()-1 ? 0 : camera_idx;
+        *glutGUI::cam = cameras[camera_idx];
         break;
 
     case '$':
@@ -313,6 +336,19 @@ vector<pair<ObjectType, Object*>> getScenario(){
         make_pair(PACMAN, new Pacman(true)),
         make_pair(GATE, new Gate(true)),
         make_pair(MAP, new Map(true))
+    };
+}
+
+vector<CameraDistante> getCameras(){
+    return {
+        CameraDistante(Vetor3D(0.225, 4.675, 7.911), Vetor3D(0.391, 0.334, -0.027), Vetor3D(0.010, 0.877, -0.479)),
+        CameraDistante(Vetor3D(0.491, 3.291, -8.580), Vetor3D(0.391, 0.334, -0.027), Vetor3D(-0.003, 0.945, 0.326)),
+        CameraDistante(Vetor3D(9.043, 2.989, -0.098), Vetor3D(0.391, 0.334, -0.027), Vetor3D(-0.293, 0.956, 0.002)),
+        CameraDistante(Vetor3D(0.684, 1.774, 3.793), Vetor3D(2.041, 0.385, 0.353), Vetor3D(0.129, 0.936, -0.327)),
+        CameraDistante(Vetor3D(0.104, 10.915, 1.678), Vetor3D(-0.009, 0.713, -0.063), Vetor3D(-0.064, 0.168, -0.983)),
+        CameraDistante(Vetor3D(0.900, 1.116, 0.453), Vetor3D(0.928, 1.101, 0.414), Vetor3D(0.175, 0.953, -0.243)),
+        CameraDistante(Vetor3D(-4.171, 2.606, 3.454), Vetor3D(-2.245, 0.615, 1.155), Vetor3D(0.355, 0.833, -0.423)),
+        CameraDistante(Vetor3D(-2.166, 1.104, 0.898), Vetor3D(-2.135, 1.079, 0.868), Vetor3D(0.371, 0.858, -0.354))
     };
 }
 
