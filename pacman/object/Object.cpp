@@ -14,7 +14,7 @@ Object::Object(bool drawOrigin, float originSize) {
     this->originSize = originSize;
 }
 
-void Object::_draw(set<Object*>& hierarchy) {
+void Object::_draw(set<Object*>& __attribute__((hierarchy))) {
     // Do nothing
 }
 
@@ -76,16 +76,19 @@ void Object::addTransformation(Transformation t, Point p, TTransformation tt) {
     ).push(pair<Transformation, Point>(t, p));
 }
 
-void Object::translate(float x, float y, float z, bool prefixed) {
+Object* Object::translate(float x, float y, float z, bool prefixed) {
     this->addTransformation(TRANSLATE, Point(x, y, z), prefixed ? PREFIXED : STANDARD);
+    return this;
 }
 
-void Object::rotate(float angle, float x, float y, float z, bool prefixed) {
+Object* Object::rotate(float angle, float x, float y, float z, bool prefixed) {
     this->addTransformation(ROTATE, Point(x, y, z, angle), prefixed ? PREFIXED : STANDARD);
+    return this;
 }
 
-void Object::scale(float x, float y, float z, bool prefixed) {
+Object* Object::scale(float x, float y, float z, bool prefixed) {
     this->addTransformation(SCALE, Point(x, y, z), prefixed ? PREFIXED : STANDARD);
+    return this;
 }
 
 void Object::setColor(Color color) {
@@ -147,6 +150,8 @@ Point& Object::operator[](Transformation t) {
         return this->selectedObject->matrix.r;
     case SCALE:
         return this->selectedObject->matrix.s;
+    default:
+        throw "Invalid transformation";
     }
 }
 

@@ -14,8 +14,8 @@ void Pill::_draw(set<Object*>& hierarchy) {
     
     cube1.scale(.65, 1, .65);
     cube2.scale(1, .65, 1);
-    cube1.draw(INFINITY, hierarchy);
-    cube2.draw(INFINITY, hierarchy);
+    cube1.draw(MAX_UNSTACKS, hierarchy);
+    cube2.draw(MAX_UNSTACKS, hierarchy);
 }
 
 PowerPill::PowerPill(Color color, bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
@@ -42,44 +42,44 @@ void PowerPill::_draw(set<Object*>& hierarchy) {
     }
     
     
-    this->pill.draw(INFINITY, hierarchy);
+    this->pill.draw(MAX_UNSTACKS, hierarchy);
     
     Pyramid pyramid = Pyramid(this->color);
     
     // top spike
     pyramid.translate(0, distance, 0);
     pyramid.scale(.5, .5, .5);
-    pyramid.draw(INFINITY, hierarchy);
+    pyramid.draw(MAX_UNSTACKS, hierarchy);
 
     // bottom spike
     pyramid.translate(0, -1 * distance, 0);
     pyramid.rotate(180, 1, 0, 0);
     pyramid.scale(.5, .5, .5);
-    pyramid.draw(INFINITY, hierarchy);
+    pyramid.draw(MAX_UNSTACKS, hierarchy);
 
     // left spike
     pyramid.translate(-1 * distance, 0, 0);
     pyramid.rotate(90, 0, 0, 1);
     pyramid.scale(.5, .5, .5);
-    pyramid.draw(INFINITY, hierarchy);
+    pyramid.draw(MAX_UNSTACKS, hierarchy);
 
     // right spike
     pyramid.translate(distance, 0, 0);
     pyramid.rotate(-90, 0, 0, 1);
     pyramid.scale(.5, .5, .5);
-    pyramid.draw(INFINITY, hierarchy);
+    pyramid.draw(MAX_UNSTACKS, hierarchy);
 
     // front spike
     pyramid.translate(0, 0, distance);
     pyramid.rotate(90, 1, 0, 0);
     pyramid.scale(.5, .5, .5);
-    pyramid.draw(INFINITY, hierarchy);
+    pyramid.draw(MAX_UNSTACKS, hierarchy);
 
     // back spike
     pyramid.translate(0, 0, -1 * distance);
     pyramid.rotate(-90, 1, 0, 0);
     pyramid.scale(.5, .5, .5);
-    pyramid.draw(INFINITY, hierarchy);
+    pyramid.draw(MAX_UNSTACKS, hierarchy);
 
 }
 

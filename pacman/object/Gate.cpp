@@ -40,7 +40,7 @@ void Gate::_drawFlag(set<Object*>& hierarchy) {
         t.rotate(angle, 1, 0, 0);
         // end rotate
         t.scale(.2, .2, .2);
-        t.draw(INFINITY, hierarchy);
+        t.draw(MAX_UNSTACKS, hierarchy);
     }
     
 }
@@ -55,28 +55,28 @@ void Gate::_draw(set<Object*>& hierarchy) {
     
     p.scale(.25,.25,.25, true);
     p.translate(-7,6,0);
-    p.draw(INFINITY, hierarchy);
+    p.draw(MAX_UNSTACKS, hierarchy);
 
     p.translate(7,6,0);
-    p.draw(INFINITY, hierarchy);
+    p.draw(MAX_UNSTACKS, hierarchy);
 
     // flag sphere
     Pill sp = Pill(Color(1.0, 0.75, 0.0));
     sp.scale(.25,.25,.25, true);
     sp.translate(-7,5,0);
-    sp.draw(INFINITY, hierarchy);
+    sp.draw(MAX_UNSTACKS, hierarchy);
 
     sp.translate(7,5,0);
-    sp.draw(INFINITY, hierarchy);
+    sp.draw(MAX_UNSTACKS, hierarchy);
 
     // gate
     Cube gate = Cube(Color(0, 0.39, 0.75));
     gate.scale(1, 1, .25, true);
     gate.translate(-1,0,0);
-    gate.draw(INFINITY, hierarchy);
+    gate.draw(MAX_UNSTACKS, hierarchy);
 
     gate.translate(1,0,0);
-    gate.draw(INFINITY, hierarchy);
+    gate.draw(MAX_UNSTACKS, hierarchy);
 
     // gate Brazilian flag
     std::array<std::tuple<int, int>, 4> gateDecPositions = {
@@ -93,20 +93,20 @@ void Gate::_draw(set<Object*>& hierarchy) {
         Cube c = Cube(Color(0.0, 0.5, 0.0));
         c.scale(.8, .8, 0.1, true);
         c.translate(x,0,z);
-        c.draw(INFINITY, hierarchy);
+        c.draw(MAX_UNSTACKS, hierarchy);
 
         Triangle tr = Triangle(Color(1.0, 0.75, 0.0));
         tr.scale(0.75,0.75,0.75, true);
         tr.translate(0,0,.82/z);
         if(z<0) tr.rotate(180, 1, 0, 0);
         tr.rotate(90*x, 0, 0, 1);
-        tr.draw(INFINITY, hierarchy);
+        tr.draw(MAX_UNSTACKS, hierarchy);
 
         Circle ci = Circle(Color(0.0, 0.39, 0.75));
         ci.scale(1.15,1.15,1.15, true);
         ci.translate(0,0,.54/z);
         if(z<0) ci.rotate(180, 1, 0, 0);
-        ci.draw(INFINITY, hierarchy);
+        ci.draw(MAX_UNSTACKS, hierarchy);
     }
 
 }

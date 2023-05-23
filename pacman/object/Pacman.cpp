@@ -31,8 +31,8 @@ void Pacman::_draw(set<Object*>& hierarchy) {
         mouthAngle--;
     else if(!mouthRotate && mouthAngle < 60)
         mouthAngle++;
-    this->topBody.draw(INFINITY, hierarchy);
-    this->bottomBody.draw(INFINITY, hierarchy);
+    this->topBody.draw(MAX_UNSTACKS, hierarchy);
+    this->bottomBody.draw(MAX_UNSTACKS, hierarchy);
 }
 
 TopBody::TopBody(Color color) {
@@ -47,10 +47,10 @@ void TopBody::_draw(set<Object*>& hierarchy) {
     Pill eye = Pill(Color(0,0,0));
     
     ssphere.rotate(90, 1, 0, 0);
-    ssphere.draw(INFINITY, hierarchy);
+    ssphere.draw(MAX_UNSTACKS, hierarchy);
 
     circle.rotate(90, 1, 0, 0);
-    circle.draw(INFINITY, hierarchy);
+    circle.draw(MAX_UNSTACKS, hierarchy);
     
     eye.scale(.1, .1, .1, true);
     eye.rotate(-60, 0 , 1, 0);
@@ -61,7 +61,7 @@ void TopBody::_draw(set<Object*>& hierarchy) {
     eye.rotate(60, 0 , 1, 0);
     eye.translate(0, 2, 4);
     eye.rotate(-25, 1, 0, 0);
-    eye.draw(INFINITY, hierarchy);
+    eye.draw(MAX_UNSTACKS, hierarchy);
 }
 
 
@@ -78,8 +78,8 @@ void BottomBody::_draw(set<Object*>& hierarchy) {
     
 
     ssphere.rotate(-90, 1, 0, 0);
-    ssphere.draw(INFINITY, hierarchy);
+    ssphere.draw(MAX_UNSTACKS, hierarchy);
 
     circle.rotate(-90, 1, 0, 0);
-    circle.draw(INFINITY, hierarchy); 
+    circle.draw(MAX_UNSTACKS, hierarchy); 
 }

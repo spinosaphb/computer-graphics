@@ -9,7 +9,7 @@ Cube::Cube(Color color, Point point, bool drawOrigin, float originSize) : Object
 
 Cube::~Cube() {}
 
-void Cube::_draw(set<Object*>& hierarchy) {
+void Cube::_draw(set<Object*>& __attribute__((hierarchy))) {
     glBegin(GL_QUADS);
         // Front face
         glNormal3f(0, 0, 1);

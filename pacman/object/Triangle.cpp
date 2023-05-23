@@ -13,7 +13,7 @@ Triangle::Triangle(Color color, bool doubleSided, Point p1, Point p2, Point p3, 
 
 Triangle::~Triangle() {}
 
-void Triangle::_draw(set<Object*>& hierarchy) {
+void Triangle::_draw(set<Object*>& __attribute__((hierarchy))) {
     if (this->doubleSided)
         glDisable(GL_CULL_FACE);
     glBegin(GL_POLYGON);

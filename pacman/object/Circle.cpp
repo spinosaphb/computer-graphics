@@ -10,7 +10,7 @@ Circle::Circle(Color color, float cx, float cy, double radius, int stacks) {
     this->selfType = ObjectType::CIRCLE;
 }
 
-void Circle::_draw(set<Object*>& hierarchy) {
+void Circle::_draw(set<Object*>& __attribute__((hierarchy))) {
     glBegin(GL_POLYGON);
         for (int i = 0; i < this->stacks; i++) {
             float theta = 2.0f * 3.1415926f * float(i) / float(this->stacks);

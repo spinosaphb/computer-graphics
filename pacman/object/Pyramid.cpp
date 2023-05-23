@@ -8,7 +8,7 @@ Pyramid::Pyramid(Color color) {
 
 Pyramid::~Pyramid() {}
 
-void Pyramid::_draw(set<Object*>& hierarchy) {
+void Pyramid::_draw(set<Object*>& __attribute__((hierarchy))) {
     glBegin(GL_POLYGON);
         glNormal3f(0,1,1);
         glVertex3f(1,0,1);

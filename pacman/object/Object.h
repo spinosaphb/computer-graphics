@@ -104,15 +104,15 @@ enum ObjectType {
     PYRAMID,
 };
 
-#define INFINITY INT_MAX
+#define MAX_UNSTACKS 100
 
 class Object {
 public:
-    void draw(int unstacks = INFINITY, set<Object*>& hierarchy = *(new set<Object*>()));
+    void draw(int unstacks = MAX_UNSTACKS, set<Object*>& hierarchy = *(new set<Object*>()));
     
-    void translate(float x, float y, float z, bool prefixed = false);
-    void rotate(float angle, float x, float y, float z, bool prefixed = false);
-    void scale(float x, float y, float z, bool prefixed = false);
+    Object* translate(float x, float y, float z, bool prefixed = false);
+    Object* rotate(float angle, float x, float y, float z, bool prefixed = false);
+    Object* scale(float x, float y, float z, bool prefixed = false);
 
     bool transformColor = false;
 
@@ -127,12 +127,15 @@ public:
     }
 
     Matrix matrix;
+    static Object* selectedObject;
+    ObjectType selfType;
+
 protected:
     void setColor(Color);
     void addTransformation(Transformation, Point, TTransformation);
     void applyPrefixTransformations();
     void clearPrefixTransformations();
-    void applyTransformations(int unstacks = INFINITY);
+    void applyTransformations(int unstacks = MAX_UNSTACKS);
     void applyMatrixTransformations();
     void applyFeatures(set<Object*>& hierarchy);
     void applyTransformation(pair<Transformation, Point> tp);
@@ -144,10 +147,6 @@ protected:
     float originSize = 2;
     bool drawOrigin = false;
     float moveFactor = 0.1;
-
-public:
-    static Object* selectedObject;
-    ObjectType selfType;
 
 private:
     static string printHierarchy(set<Object*>& hierarchy);

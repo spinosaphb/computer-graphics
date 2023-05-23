@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
 #include <gui.h>
 #include <Sphere.h>
 #include <Cube.h>
@@ -21,16 +19,13 @@ using namespace std;
 #include <fstream>
 #include <sstream>
 
-float px = 0.0;
-float py = 0.0;
-float raio = 0.5;
-float theta = 0.0;
+using namespace std;
+
 #define WIDTH 10
 #define HEIGHT 10
 
 vector<CameraDistante> getCameras();
 vector<pair<ObjectType, Object*>> getScenario();
-
 vector<CameraDistante> cameras = getCameras();
 vector<pair<ObjectType, Object*>> objects = getScenario();
 
@@ -42,32 +37,6 @@ static int object_idx = 0;
 static int camera_idx = 0;
 
 static string OBJECTS_FILENAME = "objects.pacman";
-
-void writeCamDebug()
-{
-  std::ofstream myfile;
-
-  myfile.open("camera.txt", std::ofstream::out | std::ofstream::app); // Open the file in append mode
-
-  if (myfile.is_open())
-  {
-    myfile << "glutGUI::cam->e.x=" << glutGUI::cam->e.x << "\n";
-    myfile << "glutGUI::cam->e.y=" << glutGUI::cam->e.y << "\n";
-    myfile << "glutGUI::cam->e.z=" << glutGUI::cam->e.z << "\n";
-    myfile << "glutGUI::cam->c.x=" << glutGUI::cam->c.x << "\n";
-    myfile << "glutGUI::cam->c.y=" << glutGUI::cam->c.y << "\n";
-    myfile << "glutGUI::cam->c.z=" << glutGUI::cam->c.z << "\n";
-    myfile << "glutGUI::cam->u.x=" << glutGUI::cam->u.x << "\n";
-    myfile << "glutGUI::cam->u.y=" << glutGUI::cam->u.y << "\n";
-    myfile << "glutGUI::cam->u.z=" << glutGUI::cam->u.z << "\n";
-    myfile.close(); // Close the file
-    std::cout << "Camera salva" << std::endl;
-  }
-  else
-  {
-    std::cout << "Erro ao abrir arquivo" << std::endl;
-  }
-}
 
 string handleObjectName(pair<ObjectType, Object*>& obj){
     stringstream ss;
@@ -123,41 +92,19 @@ void deserializeObjects(vector<pair<ObjectType, Object*>>& objects, string filen
     file.close();
 }
 
-void drawWall(Cube& cube) {
-    cube.translate(2.5, .25, 2);
-    cube.scale(.125, .0625, .125);
-    cube.draw();
-}
-
-void drawPill(Pill& pill) {
-    pill.translate(3,0.25,1);
-    pill.scale(.125,.125,.125);
-    pill.draw();
-}
-
-void drawPowerPill(PowerPill& superpill) {
-    superpill.translate(2,0.25,1);
-    superpill.scale(.125,.125,.125);
-    superpill.draw();
-}
-
-void drawFruit(Fruit& fruit) {
-    fruit.translate(2.5, .25, 0);
-    fruit.scale(0.25, 0.25, 0.25);
-    fruit.draw();
-}
-
-void drawPacman(Pacman& pacman) {
-    pacman.translate(2.5, .25, -2);
-    pacman.scale(.25,.25,.25);
-    pacman.draw();
-}
+void drawWall(Cube& cube) {cube.translate(2.5, .25, 2)->scale(.125, .0625, .125)->draw();}
+void drawPill(Pill& pill) {pill.translate(3,0.25,1)->scale(.125,.125,.125)->draw();}
+void drawPowerPill(PowerPill& superpill) {superpill.translate(2,0.25,1)->scale(.125,.125,.125)->draw();}
+void drawFruit(Fruit& fruit) {fruit.translate(2.5, .25, 0)->scale(0.25, 0.25, 0.25)->draw();}
+void drawPacman(Pacman& pacman) {pacman.translate(2.5, .25, -2)->scale(.25,.25,.25)->draw();}
+void drawGate(Gate& gate) {gate.translate(2.5, .25, -3)->scale(0.25, 0.25, 0.25)->draw();}
+void drawPacManMap(Map& map_){map_.scale(.75,.75,.75)->translate(-1,.1,0)->draw();}
 
 void drawPhantom(Phantom& phantom) {
     float pos[] = {1.75, 2.25, 2.75, 3.25};
-    phantom.translate(pos[phantom.colorFlag] , .25, -1);
-    phantom.scale(0.25,0.25,0.25);
-    phantom.draw();
+    phantom.translate(pos[phantom.colorFlag] , .25, -1)
+          ->scale(0.25,0.25,0.25)
+          ->draw();
 }
 
 void drawPhatoms(map<ghost::PhantomColor, Phantom>& phantoms) {
@@ -165,23 +112,12 @@ void drawPhatoms(map<ghost::PhantomColor, Phantom>& phantoms) {
     float pos[] = {1.75, 2.25, 2.75, 3.25};
     for(int i = 0; i < 4; i++){
         Phantom& p = phantoms[pcs[i]];
-        p.translate(pos[i], .25, -1);
-        p.scale(0.25,0.25,0.25);
-        p.draw();
+        p.translate(pos[i], .25, -1)
+        ->scale(0.25,0.25,0.25)
+        ->draw();
     }
 }
 
-void drawGate(Gate& gate) {
-    gate.translate(2.5, .25, -3);
-    gate.scale(0.25, 0.25, 0.25);
-    gate.draw();
-}
-
-void drawPacManMap(Map& map_){
-    map_.scale(.75,.75,.75);
-    map_.translate(-1,.1,0);
-    map_.draw();
-}
 
 
 void drawObject(Object*& obj) {
@@ -253,6 +189,14 @@ void teclado(unsigned char tecla, int mx, int my) {
     case 'w':
         if(enable_transform)
             (*objects[object_idx].second)[TRANSLATE][paxis::Y]+=0.1;
+        break;
+    case 'b':
+        if(enable_transform)
+            (*objects[object_idx].second)[TRANSLATE][paxis::Z]-=0.1;
+        break;
+    case 'f':
+        if(enable_transform)
+            (*objects[object_idx].second)[TRANSLATE][paxis::Z]+=0.1;
         break;
     case 'S':
         enable_select = !enable_select;

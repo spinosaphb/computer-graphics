@@ -19,7 +19,7 @@ void Fruit::_draw(set<Object*>& hierarchy) {
 
     // draw the second cherry on the right
     cherry.translate(2, 0, 0);
-    cherry.draw(INFINITY, hierarchy);
+    cherry.draw(MAX_UNSTACKS, hierarchy);
 
     // draw cherry stalk
     Cube stalk = Cube(this->stalkColor);
@@ -29,12 +29,12 @@ void Fruit::_draw(set<Object*>& hierarchy) {
     stalk.rotate(-30, 0, 0, 1);
     stalk.scale(.2, 2.5, .2);
     stalk.scale(.3, .3, .3);
-    stalk.draw(INFINITY, hierarchy);
+    stalk.draw(MAX_UNSTACKS, hierarchy);
 
     // draw the second stalk
     stalk.translate(.37, .5, 0);
     stalk.rotate(45, 0, 0, 1);
     stalk.scale(.2, 1.6, .2);
     stalk.scale(.3, .3, .3);
-    stalk.draw(INFINITY, hierarchy);
+    stalk.draw(MAX_UNSTACKS, hierarchy);
 }
