@@ -43,7 +43,6 @@ private:
     void _drawPhantom(float x, float z, int value, set<Object*>& hierarchy );
     void _drawPacman(float x, float z, set<Object*>& hierarchy );
     void _drawFruit(float x, float z, set<Object*>& hierarchy );
-
 };
 
 #endif

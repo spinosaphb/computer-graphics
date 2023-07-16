@@ -21,7 +21,6 @@ void Pill::_draw(set<Object*>& hierarchy) {
 PowerPill::PowerPill(Color color, bool drawOrigin, float originSize) : Object(drawOrigin, originSize) {
     this->color = color;
     this->pill = Pill(color);
-    this->_makeAnimation();
     this->selfType = ObjectType::POWER_PILL;
 }
 
@@ -40,6 +39,8 @@ void PowerPill::_draw(set<Object*>& hierarchy) {
         if (distance < 1.0)
             up = true;
     }
+
+    this->_makeAnimation();
     
     
     this->pill.draw(MAX_UNSTACKS, hierarchy);
@@ -96,5 +97,6 @@ void PowerPill::_makeAnimation() {
         if (sf < .9) up = true;
     }
     
-    this->scale(sf, sf, sf);
+    // this->scale(sf, sf, sf);
+    this->pill.scale(sf, sf, sf);
 }

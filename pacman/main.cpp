@@ -35,8 +35,190 @@ static float tfactor = 2;
 
 static int object_idx = 0;
 static int camera_idx = 0;
+static int perspective_idx = 0;
+static int ortho_idx = 0;
+static float ortho_factor = 4;
+
+//-------------------viewPorts------------------
+bool viewports = false;
+bool scissored = false;
+
+//-------------------sombra-------------------
+bool shadow_on_planes = false;
+static bool draw_shadow = false;
+bool light_type = true;
+float k = 0.0;
+
+//-------------------light-------------------
+Point light_default = Point(0, 2, 0);
 
 static string OBJECTS_FILENAME = "objects.pacman";
+
+
+void saveCameraState(){
+    string filename = "camera.pacman";
+    ofstream file;
+    file.open(filename, ios::app);
+    file << "glutGUI::cam->e.x = " << glutGUI::cam->e.x << ";" << endl;
+    file << "glutGUI::cam->e.y = " << glutGUI::cam->e.y << ";" << endl;
+    file << "glutGUI::cam->e.z = " << glutGUI::cam->e.z << ";" << endl;
+    file << "glutGUI::cam->c.x = " << glutGUI::cam->c.x << ";" << endl;
+    file << "glutGUI::cam->c.y = " << glutGUI::cam->c.y << ";" << endl;
+    file << "glutGUI::cam->c.z = " << glutGUI::cam->c.z << ";" << endl;
+    file << "glutGUI::cam->u.x = " << glutGUI::cam->u.x << ";" << endl;
+    file << "glutGUI::cam->u.y = " << glutGUI::cam->u.y << ";" << endl;
+    file << "glutGUI::cam->u.z = " << glutGUI::cam->u.z << ";" << endl;
+    file << endl;
+    file.close();
+}
+
+
+void persp_cam_1(){
+    glutGUI::cam->e.x = 2.57946;
+    glutGUI::cam->e.y = 0.447501;
+    glutGUI::cam->e.z = -3.34196;
+    glutGUI::cam->c.x = 2.58955;
+    glutGUI::cam->c.y = 0.735287;
+    glutGUI::cam->c.z = 0.697798;
+    glutGUI::cam->u.x = -0.000177465;
+    glutGUI::cam->u.y = 0.997472;
+    glutGUI::cam->u.z = -0.0710579;
+}
+
+void persp_cam_2(){
+    glutGUI::cam->e.x = 3.35668;
+    glutGUI::cam->e.y = 0.393931;
+    glutGUI::cam->e.z = -3.26421;
+    glutGUI::cam->c.x = 2.58955;
+    glutGUI::cam->c.y = 0.735287;
+    glutGUI::cam->c.z = 0.697798;
+    glutGUI::cam->u.x = 0.0160218;
+    glutGUI::cam->u.y = 0.996442;
+    glutGUI::cam->u.z = -0.0827484;
+}
+
+void persp_cam_3(){
+    glutGUI::cam->e.x = 3.51747;
+    glutGUI::cam->e.y = 0.636584;
+    glutGUI::cam->e.z = -3.24324;
+    glutGUI::cam->c.x = 2.58955;
+    glutGUI::cam->c.y = 0.735287;
+    glutGUI::cam->c.z = 0.697798;
+    glutGUI::cam->u.x = 0.00558545;
+    glutGUI::cam->u.y = 0.999703;
+    glutGUI::cam->u.z = -0.0237224;
+}
+
+void ortho_view_front() {
+    glutGUI::cam->e.x = 0;
+    glutGUI::cam->e.y = 0;
+    glutGUI::cam->e.z = 4*ortho_factor;
+    glutGUI::cam->c.x = 0;
+    glutGUI::cam->c.y = 0;
+    glutGUI::cam->c.z = 0;
+    glutGUI::cam->u.x = 0;
+    glutGUI::cam->u.y = 1;
+    glutGUI::cam->u.z = 0;
+}
+
+void ortho_view_back() {
+    glutGUI::cam->e.x = 0;
+    glutGUI::cam->e.y = 0;
+    glutGUI::cam->e.z = -4*ortho_factor;
+    glutGUI::cam->c.x = 0;
+    glutGUI::cam->c.y = 0;
+    glutGUI::cam->c.z = 0;
+    glutGUI::cam->u.x = 0;
+    glutGUI::cam->u.y = 1;
+    glutGUI::cam->u.z = 0;
+}
+
+void ortho_view_left() {
+    glutGUI::cam->e.x = -4*ortho_factor;
+    glutGUI::cam->e.y = 0;
+    glutGUI::cam->e.z = 0;
+    glutGUI::cam->c.x = 0;
+    glutGUI::cam->c.y = 0;
+    glutGUI::cam->c.z = 0;
+    glutGUI::cam->u.x = 0;
+    glutGUI::cam->u.y = 1;
+    glutGUI::cam->u.z = 0;
+}
+
+void ortho_view_right() {
+    glutGUI::cam->e.x = 4*ortho_factor;
+    glutGUI::cam->e.y = 0;
+    glutGUI::cam->e.z = 0;
+    glutGUI::cam->c.x = 0;
+    glutGUI::cam->c.y = 0;
+    glutGUI::cam->c.z = 0;
+    glutGUI::cam->u.x = 0;
+    glutGUI::cam->u.y = 1;
+    glutGUI::cam->u.z = 0;
+}
+
+void ortho_view_top() {
+    glutGUI::cam->e.x = 0;
+    glutGUI::cam->e.y = 4*ortho_factor;
+    glutGUI::cam->e.z = 0;
+    glutGUI::cam->c.x = 0;
+    glutGUI::cam->c.y = 0;
+    glutGUI::cam->c.z = 0;
+    glutGUI::cam->u.x = 0;
+    glutGUI::cam->u.y = 0;
+    glutGUI::cam->u.z = -1;
+}
+
+
+void ortho_axo_iso() { // Orthographic axonometric isometric
+    glutGUI::cam->e.x = 4;
+    glutGUI::cam->e.y = 2;
+    glutGUI::cam->e.z = 3;
+    glutGUI::cam->c.x = 1;
+    glutGUI::cam->c.y = -.5;
+    glutGUI::cam->c.z = 0;
+    glutGUI::cam->u.x = 0;
+    glutGUI::cam->u.y = 1;
+    glutGUI::cam->u.z = 0;
+}
+
+void ortho_axo_dimetric() { // Orthographic axonometric dimetric
+    glutGUI::cam->e.x = 4;
+    glutGUI::cam->e.y = 1;
+    glutGUI::cam->e.z = 3;
+    glutGUI::cam->c.x = 1;
+    glutGUI::cam->c.y = 0;
+    glutGUI::cam->c.z = 0;
+    glutGUI::cam->u.x = 0;
+    glutGUI::cam->u.y = 1;
+    glutGUI::cam->u.z = 0;
+}
+
+void ortho_axo_trimetric() { // Orthographic axonometric trimetric
+    glutGUI::cam->e.x = 4;
+    glutGUI::cam->e.y = 0;
+    glutGUI::cam->e.z = 3;
+    glutGUI::cam->c.x = 1;
+    glutGUI::cam->c.y = 0;
+    glutGUI::cam->c.z = 0;
+    glutGUI::cam->u.x = 0;
+    glutGUI::cam->u.y = 1;
+    glutGUI::cam->u.z = 0;
+}
+
+std::vector<void (*)()> perspectives = {&persp_cam_1, &persp_cam_2, &persp_cam_3};
+std::vector<void (*)()> orthos = {
+    &ortho_view_front,
+    &ortho_view_left,
+    &ortho_view_back,
+    &ortho_view_right,
+    &ortho_view_top,
+
+    &ortho_axo_iso,
+    &ortho_axo_dimetric,
+    &ortho_axo_trimetric
+};
+
 
 string handleObjectName(pair<ObjectType, Object*>& obj){
     stringstream ss;
@@ -133,16 +315,136 @@ void drawObject(Object*& obj) {
     }
 }
 
+void displayInner() {
+
+    GUI::setLight(0, glutGUI::lx,glutGUI::ly,glutGUI::lz, true, false);
+    GUI::drawOrigin(1);
+    GUI::setColor(0.6,0.6,0.6, 1,true);
+
+    glPushMatrix();
+    glTranslated(0.0,k,0.0);
+    GUI::drawFloor(10,8,0.1,0.1);
+
+    glPopMatrix();
+
+    for (int i = 0; i < objects.size(); ++i) {
+        glPushMatrix();
+            drawObject(objects[i].second);
+        glPopMatrix();
+    }
+
+    float lightPos[4] = {1.5+glutGUI::lx,1.5+glutGUI::ly,1.5+glutGUI::lz, light_type};
+
+    glPushMatrix();
+        GLfloat sombra[4][4];
+        GUI::shadowMatrixYk(sombra,lightPos,k);
+        glMultTransposeMatrixf( (GLfloat*)sombra );
+        glDisable(GL_LIGHTING);
+        glColor3d(0.0,0.0,0.0);
+        if (draw_shadow) {
+            bool aux = glutGUI::draw_eixos;
+            glutGUI::draw_eixos = false;
+                glPushMatrix();
+                    drawObject(objects[object_idx].second);
+                glPopMatrix();
+            glutGUI::draw_eixos = aux;
+        }
+
+        glEnable(GL_LIGHTING);
+    glPopMatrix();
+    //-------------------sombra-------------------
+}
+
+void shadow_hover( GLfloat plano[4], float lightPos[4] ) {
+    bool aux = glutGUI::draw_eixos;
+    glutGUI::draw_eixos = false;
+
+    glDisable(GL_LIGHTING);
+    glColor3d(0.0,0.0,0.0);
+
+    GLfloat sombra[4][4];
+
+    glPushMatrix();
+        GUI::shadowMatrix(sombra,plano,lightPos);
+        glMultTransposeMatrixf( (GLfloat*)sombra );
+            drawObject(objects[object_idx].second);
+        glEnable(GL_LIGHTING);
+    glPopMatrix();
+}
+
+
+void sombraPlano() {
+    float lightPos[4] = {glutGUI::lx,glutGUI::ly,glutGUI::lz, light_type ? 1.0f : 0.0f};
+
+    // GUI::setLight(0,lightPos[0],lightPos[1],lightPos[2],true,false,false,false,light_type);
+    GLfloat plano_chao[4] = {0,1,0, -0.001};
+    shadow_hover(plano_chao, lightPos);
+
+    // lateral
+    GUI::setColor(1, 0.98, 0.98);
+    glPushMatrix();
+        GUI::drawBox(-5,0,-4, -4.77,5,0);
+    glPopMatrix();
+    GLfloat plano_lateral[4] = {1,0,0, 4.77-0.001};
+    shadow_hover(plano_lateral, lightPos);
+
+    // frente
+    GUI::setColor(1, 0.98, 0.98);
+    glPushMatrix();
+        GUI::drawBox(-4.77,0,-4, 0,5,-3.77);
+    glPopMatrix();
+    GLfloat plano_frente[4] = {0,0,1, 3.77-0.001};
+    shadow_hover(plano_frente, lightPos);
+
+    // inclinado
+    GUI::setColor(1, 0.98, 0.98);
+    glPushMatrix();
+        glTranslatef(-4.2,0,-2);
+        glRotatef(-45, 0,0,1);
+        GUI::drawQuad(1,4);
+    glPopMatrix();
+    GLfloat plano_inclinado[4] = {1,1,0, 4.2-0.001};
+    shadow_hover(plano_inclinado, lightPos);
+}
+
+
+void desenha_viewports_gerais() {
+    GUI::displayInit();
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glViewport(0, 0, glutGUI::width/2, glutGUI::height/2);
+    gluLookAt(glutGUI::cam->e.x,glutGUI::cam->e.y,glutGUI::cam->e.z,glutGUI::cam->c.x,glutGUI::cam->c.y,glutGUI::cam->c.z,glutGUI::cam->u.x,glutGUI::cam->u.y,glutGUI::cam->u.z);
+    displayInner();
+
+    glLoadIdentity();
+    glViewport(0, glutGUI::height/2, glutGUI::width/2, glutGUI::height/2);
+    gluLookAt(0,10,0, 0,0,0, 0,0,1);
+    displayInner();
+
+    glLoadIdentity();
+    glViewport(glutGUI::width/2, 0, glutGUI::width/2, glutGUI::height/2);
+    gluLookAt(0,1,-10, 0,1,0, 0,1,0);
+    displayInner();
+
+    glLoadIdentity();
+    glViewport(glutGUI::width/2, glutGUI::height/2, glutGUI::width/2, glutGUI::height/2);
+    gluLookAt(10,1,0, 0,1,0, 0,1,0);
+    displayInner();
+}
+
 
 void draw() {
 
     GUI::displayInit();
 
-    GUI::setLight(0, 0,2,0, true, false);
+    if(!viewports)
+       displayInner();
+    else
+       desenha_viewports_gerais();
 
-    GUI::setColor(.1,.1,.1);
-    GUI::drawFloor(WIDTH, HEIGHT);
-    GUI::drawOriginAL(1, 0.1);
+    if (shadow_on_planes)
+        sombraPlano();
 
     Object::selectObject(enable_select ? objects[object_idx].second : nullptr);
     objects[object_idx].second->transformColor = enable_transform;
@@ -152,9 +454,7 @@ void draw() {
         (*objects[object_idx].second)[ROTATE] += Point(glutGUI::dax, glutGUI::day, glutGUI::daz)*tfactor;
         (*objects[object_idx].second)[SCALE] += Point(glutGUI::dsx, glutGUI::dsy, glutGUI::dsz)*tfactor;
     }
-    
-    for(auto& obj : objects) drawObject(obj.second);
-    
+
     GUI::displayEnd();
 
 }
@@ -216,6 +516,11 @@ void teclado(unsigned char tecla, int mx, int my) {
         objects.clear();
         objects = getScenario();
         object_idx = 0;
+
+        glutGUI::lx = light_default.x;
+        glutGUI::ly = light_default.y;
+        glutGUI::lz = light_default.z;
+
         break;
 
     case '=':
@@ -248,7 +553,7 @@ void teclado(unsigned char tecla, int mx, int my) {
     case '9': objects.push_back(make_pair(PACMAN, new Pacman())); break;
     case '0': objects.push_back(make_pair(GATE, new Gate())); break;
     case '-': objects.push_back(make_pair(MAP, new Map())); break;
-    
+
     case '@':
         camera_idx = ++camera_idx > cameras.size()-1 ? 0 : camera_idx;
         *glutGUI::cam = cameras[camera_idx];
@@ -261,7 +566,43 @@ void teclado(unsigned char tecla, int mx, int my) {
     case '%':
         deserializeObjects(objects);
         break;
+
+    case '(':
+        draw_shadow = enable_select && !draw_shadow;
+        break;
+
+    case ')':
+        shadow_on_planes = enable_select && !shadow_on_planes;
+        break;
+
+    case 'i':
+        light_type = !light_type;
+        break;
+
+    case 'v':
+        viewports = !viewports;
+        break;
+
+    case 'n':
+        glutGUI::perspective = !glutGUI::perspective;
+        break;
+
+    case '\'':
+        glutGUI::pontosDeFuga = !glutGUI::pontosDeFuga;
+        break;
+
+    case '*':
+        // iterate over perspective cameras
+        (*perspectives[perspective_idx])();
+        perspective_idx = ++perspective_idx > perspectives.size()-1 ? 0 : perspective_idx;
+        break;
     
+    case '!':
+        // iterate over ortho cameras
+        (*orthos[ortho_idx])();
+        ortho_idx = ++ortho_idx > orthos.size()-1 ? 0 : ortho_idx;
+        break;
+
     default:
         break;
     }
@@ -296,9 +637,53 @@ vector<CameraDistante> getCameras(){
     };
 }
 
+void drawControlPoints(){
+    for (size_t i=0; i < objects.size(); i++) {
+        glPushName(i+1);
+            drawObject(objects[i].second);
+        glPopName();
+    }
+}
+
+int picking( GLint cursorX, GLint cursorY, int w, int h ) {
+    int BUFSIZE = 512;
+    GLuint selectBuf[512];
+    GUI::pickingInit(cursorX,cursorY,w,h,selectBuf,BUFSIZE);
+    GUI::displayInit();
+    drawControlPoints();
+    return GUI::pickingClosestName(selectBuf,BUFSIZE);
+}
+
+void mouse(int button, int state, int x, int y) {
+    GUI::mouseButtonInit(button,state,x,y);
+
+    if (button == GLUT_LEFT_BUTTON) {
+        if (state == GLUT_DOWN) {
+            int pick = picking( x, y, 5, 5 );
+            if (pick != 0) {
+                if(!enable_transform)
+                    enable_select = !enable_select;
+                if (enable_select) {
+                    object_idx = pick-1;
+                    Object::selectObject(objects[object_idx].second);
+                    glutGUI::lbpressed = false;
+                }else{
+                    shadow_on_planes = false;
+                    draw_shadow = false;
+                }
+            }
+        }
+    }
+}
+
+
 int main()
 {
     cout << "Hello World!" << endl;
 
-    GUI gui = GUI(800,600,draw,teclado, glutGUI::defaultMouseButton, "Pacman World");
+    glutGUI::lx = 0;
+    glutGUI::ly = 2;
+    glutGUI::lz = 0;
+
+    GUI gui = GUI(800,600,draw,teclado, mouse, "Pacman World");
 }

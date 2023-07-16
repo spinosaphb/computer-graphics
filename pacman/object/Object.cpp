@@ -110,11 +110,12 @@ void Object::applyMatrixTransformations() {
         pair<Transformation, 
         Point>(ROTATE, Point(1, 0, 0, this->matrix.r.x))
     );
-    applyTransformation(pair<Transformation, Point>(SCALE, this->matrix.s)); 
+    applyTransformation(pair<Transformation, Point>(SCALE, this->matrix.s));
 }
 
 void Object::applyFeatures(set<Object*>& hierarchy) {
     if(hierarchy.find(this->selectedObject) != hierarchy.end()){
+        // if(hierarchy.find(this) != hierarchy.end())
         if(this->drawOrigin)
             GUI::drawOrigin(this->originSize);
         if((*hierarchy.begin())->transformColor)
