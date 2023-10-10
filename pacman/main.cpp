@@ -39,17 +39,14 @@ static int perspective_idx = 0;
 static int ortho_idx = 0;
 static float ortho_factor = 4;
 
-//-------------------viewPorts------------------
 bool viewports = false;
 bool scissored = false;
 
-//-------------------sombra-------------------
 bool shadow_on_planes = false;
 static bool draw_shadow = false;
 bool light_type = true;
 float k = 0.0;
 
-//-------------------light-------------------
 Point light_default = Point(0, 2, 0);
 
 static string OBJECTS_FILENAME = "objects.pacman";
@@ -352,7 +349,6 @@ void displayInner() {
 
         glEnable(GL_LIGHTING);
     glPopMatrix();
-    //-------------------sombra-------------------
 }
 
 void shadow_hover( GLfloat plano[4], float lightPos[4] ) {
@@ -373,14 +369,12 @@ void shadow_hover( GLfloat plano[4], float lightPos[4] ) {
 }
 
 
-void sombraPlano() {
+void apply_shadow() {
     float lightPos[4] = {glutGUI::lx,glutGUI::ly,glutGUI::lz, light_type ? 1.0f : 0.0f};
 
-    // GUI::setLight(0,lightPos[0],lightPos[1],lightPos[2],true,false,false,false,light_type);
     GLfloat plano_chao[4] = {0,1,0, -0.001};
     shadow_hover(plano_chao, lightPos);
 
-    // lateral
     GUI::setColor(1, 0.98, 0.98);
     glPushMatrix();
         GUI::drawBox(-5,0,-4, -4.77,5,0);
@@ -388,7 +382,6 @@ void sombraPlano() {
     GLfloat plano_lateral[4] = {1,0,0, 4.77-0.001};
     shadow_hover(plano_lateral, lightPos);
 
-    // frente
     GUI::setColor(1, 0.98, 0.98);
     glPushMatrix();
         GUI::drawBox(-4.77,0,-4, 0,5,-3.77);
@@ -396,19 +389,18 @@ void sombraPlano() {
     GLfloat plano_frente[4] = {0,0,1, 3.77-0.001};
     shadow_hover(plano_frente, lightPos);
 
-    // inclinado
     GUI::setColor(1, 0.98, 0.98);
     glPushMatrix();
-        glTranslatef(-4.2,0,-2);
+        glTranslatef(-4.5,0,-2);
         glRotatef(-45, 0,0,1);
         GUI::drawQuad(1,4);
     glPopMatrix();
-    GLfloat plano_inclinado[4] = {1,1,0, 4.2-0.001};
+    GLfloat plano_inclinado[4] = {1,1,0, 4.5-0.001};
     shadow_hover(plano_inclinado, lightPos);
 }
 
 
-void desenha_viewports_gerais() {
+void draw_viewports() {
     GUI::displayInit();
 
     glMatrixMode(GL_MODELVIEW);
@@ -441,10 +433,10 @@ void draw() {
     if(!viewports)
        displayInner();
     else
-       desenha_viewports_gerais();
+       draw_viewports();
 
     if (shadow_on_planes)
-        sombraPlano();
+        apply_shadow();
 
     Object::selectObject(enable_select ? objects[object_idx].second : nullptr);
     objects[object_idx].second->transformColor = enable_transform;
